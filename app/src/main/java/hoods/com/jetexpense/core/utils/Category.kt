@@ -1,4 +1,4 @@
-package hoods.com.jetexpense.util
+package hoods.com.jetexpense.core.utils
 
 import androidx.compose.ui.graphics.Color
 import hoods.com.jetexpense.R
