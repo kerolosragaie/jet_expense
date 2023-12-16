@@ -2,7 +2,24 @@ package hoods.com.jetexpense.core.utils
 
 import androidx.compose.ui.graphics.Color
 import hoods.com.jetexpense.R
-import hoods.com.jetexpense.ui.theme.*
+import hoods.com.jetexpense.core.theme.businessBg
+import hoods.com.jetexpense.core.theme.clothBg
+import hoods.com.jetexpense.core.theme.electricBg
+import hoods.com.jetexpense.core.theme.food_drink
+import hoods.com.jetexpense.core.theme.gadgetBg
+import hoods.com.jetexpense.core.theme.giftBg
+import hoods.com.jetexpense.core.theme.groceryBg
+import hoods.com.jetexpense.core.theme.healthBg
+import hoods.com.jetexpense.core.theme.homeBg
+import hoods.com.jetexpense.core.theme.leisureBg
+import hoods.com.jetexpense.core.theme.miscBg
+import hoods.com.jetexpense.core.theme.petBg
+import hoods.com.jetexpense.core.theme.schBg
+import hoods.com.jetexpense.core.theme.snackBg
+import hoods.com.jetexpense.core.theme.subBg
+import hoods.com.jetexpense.core.theme.taxiBg
+import hoods.com.jetexpense.core.theme.travelBg
+import hoods.com.jetexpense.core.theme.vehicleBg
 
 
 enum class Category(

@@ -1,4 +1,4 @@
-package hoods.com.jetexpense.ui.theme
+package hoods.com.jetexpense.core.theme
 
 import android.app.Activity
 import android.os.Build
