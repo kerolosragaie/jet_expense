@@ -12,4 +12,4 @@ Dark and Light Themes: The app supports both dark and light themes, ensuring a v
 
 ## Screenshots
 
-![Screenshot 1](screenshots/preview_1.gif)
+<img src="screenshots/preview_1.gif" width="300" height="560"/>
