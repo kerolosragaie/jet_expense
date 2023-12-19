@@ -4,6 +4,7 @@ import hoods.com.jetexpense.data.local.dao.ExpenseDao
 import hoods.com.jetexpense.data.local.dao.IncomeDao
 import hoods.com.jetexpense.data.models.entity.ExpenseEntity
 import hoods.com.jetexpense.data.models.entity.IncomeEntity
+import hoods.com.jetexpense.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -12,7 +13,7 @@ import javax.inject.Inject
 class ExpenseRepoImpl @Inject constructor(
     private val incomeDao: IncomeDao,
     private val expenseDao: ExpenseDao,
-    private val dispatcher: CoroutineDispatcher,
+    @IoDispatcher private val dispatcher: CoroutineDispatcher,
 ) : ExpenseRepo {
     override val income: Flow<List<IncomeEntity>>
         get() = incomeDao.getAllIncome()
@@ -39,11 +40,11 @@ class ExpenseRepoImpl @Inject constructor(
         expenseDao.updateExpense(expenseEntity)
     }
 
-    override suspend fun deleteIncome(id: Int): Int = withContext(dispatcher){
+    override suspend fun deleteIncome(id: Int): Int = withContext(dispatcher) {
         incomeDao.deleteIncome(id)
     }
 
-    override suspend fun deleteExpense(id: Int): Int = withContext(dispatcher){
+    override suspend fun deleteExpense(id: Int): Int = withContext(dispatcher) {
         expenseDao.deleteExpense(id)
     }
 }
