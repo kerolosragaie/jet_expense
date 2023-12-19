@@ -1,4 +1,4 @@
-package hoods.com.jetexpense.presentation.home
+package hoods.com.jetexpense.presentation.home.viewmodel
 
 import hoods.com.jetexpense.domain.models.Expense
 import hoods.com.jetexpense.domain.models.Income

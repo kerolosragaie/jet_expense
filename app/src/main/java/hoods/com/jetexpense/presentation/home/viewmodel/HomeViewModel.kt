@@ -1,4 +1,4 @@
-package hoods.com.jetexpense.presentation.home
+package hoods.com.jetexpense.presentation.home.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
