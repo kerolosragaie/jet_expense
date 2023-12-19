@@ -7,9 +7,7 @@ import java.util.Locale
 
 object DateFormatter{
 
-    private val date = Calendar.getInstance()
-
-    private fun formatDate(
+     fun formatDate(
         date: Calendar,
     ): String {
         val c = date
