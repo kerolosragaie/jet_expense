@@ -2,6 +2,7 @@ package hoods.com.jetexpense.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import hoods.com.jetexpense.core.utils.ResultState
 import hoods.com.jetexpense.data.dummy.dummyExpenseList
 import hoods.com.jetexpense.data.dummy.dummyIncomeList
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class HomeViewModel @Inject constructor(
     private val expenseRepo: ExpenseRepo,
 ) : ViewModel() {
