@@ -17,7 +17,7 @@ interface IncomeDao {
     suspend fun deleteAllIncome()
 
     @Query("DELETE FROM income_table WHERE income_id = :id")
-    suspend fun deleteIncome(id: String): Int
+    suspend fun deleteIncome(id: Int): Int
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateIncome(incomeEntity: IncomeEntity)

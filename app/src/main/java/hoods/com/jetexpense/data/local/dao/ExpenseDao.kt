@@ -17,7 +17,7 @@ interface ExpenseDao {
     suspend fun deleteAllExpense()
 
     @Query("DELETE FROM expense_table WHERE expense_id = :id")
-    suspend fun deleteExpense(id: String): Int
+    suspend fun deleteExpense(id: Int): Int
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateExpense(expenseEntity: ExpenseEntity)
