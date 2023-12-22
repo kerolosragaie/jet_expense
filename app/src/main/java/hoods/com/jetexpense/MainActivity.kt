@@ -3,43 +3,60 @@ package hoods.com.jetexpense
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import hoods.com.jetexpense.core.theme.JetExpenseTheme
+import hoods.com.jetexpense.data.dummy.dummyExpenseList
+import hoods.com.jetexpense.data.dummy.dummyIncomeList
+import hoods.com.jetexpense.presentation.home.HomeScreen
+import hoods.com.jetexpense.presentation.home.viewmodel.HomeUiState
+import hoods.com.jetexpense.presentation.home.viewmodel.HomeViewModel
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val homeViewModel: HomeViewModel = hiltViewModel()
+
             JetExpenseTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                }
+                HomeScreen(
+                    homeUiState = homeViewModel.homeUiState,
+                    onIncomeItemClick = {},
+                    onSeeAllIncome = {},
+                    onExpenseItemClick = {},
+                    onSeeAllExpense = {},
+                    onCLickInsertExpense = {
+                        homeViewModel.insertExpense()
+                    },
+                    onCLickInsertIncome = {
+                        homeViewModel.insertIncome()
+                    },
+                )
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
+@Preview(showSystemUi = true)
 @Composable
 fun GreetingPreview() {
     JetExpenseTheme {
-        Greeting("Android")
+        HomeScreen(
+            homeUiState = HomeUiState(
+                incomeList = dummyIncomeList,
+                expenseList = dummyExpenseList,
+                totalIncome = 5000f,
+                totalExpense = 3000f,
+            ),
+            onIncomeItemClick = {},
+            onSeeAllIncome = {},
+            onExpenseItemClick = {},
+            onSeeAllExpense = {},
+            onCLickInsertExpense = {},
+            onCLickInsertIncome = {},
+        )
     }
 }
