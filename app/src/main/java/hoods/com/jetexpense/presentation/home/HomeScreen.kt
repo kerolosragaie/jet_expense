@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -15,6 +14,7 @@ import hoods.com.jetexpense.core.theme.JetExpenseTheme
 import hoods.com.jetexpense.data.dummy.dummyExpenseList
 import hoods.com.jetexpense.data.dummy.dummyIncomeList
 import hoods.com.jetexpense.presentation.home.components.AccountTotalBalance
+import hoods.com.jetexpense.presentation.home.components.ExpenseCard
 import hoods.com.jetexpense.presentation.home.components.IncomeCard
 import hoods.com.jetexpense.presentation.home.viewmodel.HomeUiState
 
@@ -23,6 +23,8 @@ fun HomeScreen(
     homeUiState: HomeUiState,
     onIncomeItemClick: (id: Int) -> Unit,
     onSeeAllIncome: () -> Unit,
+    onExpenseItemClick: (id: Int) -> Unit,
+    onSeeAllExpense: () -> Unit,
 ) {
 
     Scaffold { contentPadding ->
@@ -45,11 +47,10 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.height(10.dp))
             }
             item {
-                //TODO replace with expense card
-                IncomeCard(
+                ExpenseCard(
                     homeUiState = homeUiState,
-                    onClickItem = onIncomeItemClick,
-                    onClickSeeAll = onSeeAllIncome,
+                    onClickItem = onExpenseItemClick,
+                    onClickSeeAll = onSeeAllExpense,
                 )
             }
         }
@@ -79,6 +80,8 @@ fun PrevHomeScreen() {
             ),
             onIncomeItemClick = {},
             onSeeAllIncome = {},
+            onExpenseItemClick = {},
+            onSeeAllExpense = {},
         )
     }
 }
