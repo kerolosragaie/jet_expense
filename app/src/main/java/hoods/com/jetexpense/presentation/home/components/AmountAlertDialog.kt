@@ -1,4 +1,4 @@
-package hoods.com.jetexpense.core.components
+package hoods.com.jetexpense.presentation.home.components
 
 import android.content.res.Configuration
 import android.widget.Toast
@@ -33,8 +33,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.hilt.navigation.compose.hiltViewModel
 import hoods.com.jetexpense.R
 import hoods.com.jetexpense.core.theme.JetExpenseTheme
+import hoods.com.jetexpense.core.utils.DateFormatter.formatDate
+import hoods.com.jetexpense.domain.models.Expense
+import hoods.com.jetexpense.domain.models.Income
+import hoods.com.jetexpense.presentation.home.viewmodel.HomeViewModel
+import java.util.Calendar
 
 @Composable
 fun AmountAlertDialog(
@@ -43,9 +49,11 @@ fun AmountAlertDialog(
     positiveBttnTitle: String = stringResource(R.string.ok),
     negativeBttnTitle: String = stringResource(R.string.cancel),
     onClickCancel: () -> Unit,
-    onClickOk: (selectedOption: String, expenseCategory: String?, title: String, description: String, amount: Double) -> Unit,
+    onClickOk: () -> Unit,
 ) {
     val context = LocalContext.current
+    val homeViewModel: HomeViewModel = hiltViewModel()
+
     var amount by remember {
         mutableDoubleStateOf(0.0)
     }
@@ -67,11 +75,11 @@ fun AmountAlertDialog(
     }
 
     if (!showDialog) {
-        title=""
-        description=""
-        expenseCategory=""
-        amount=0.0
-        selectedOption=optionsList.first()
+        title = ""
+        description = ""
+        expenseCategory = ""
+        amount = 0.0
+        selectedOption = optionsList.first()
         return
     }
 
@@ -178,14 +186,31 @@ fun AmountAlertDialog(
                                     Toast.LENGTH_SHORT
                                 ).show()
                             } else {
+                                val date = Calendar.getInstance()
 
-                                onClickOk(
-                                    selectedOption,
-                                    if (selectedOption.lowercase() == "expense") expenseCategory else null,
-                                    title,
-                                    description,
-                                    amount
-                                )
+                                if (selectedOption.lowercase() == "income") {
+                                    homeViewModel.insertIncome(
+                                        Income(
+                                            title = title,
+                                            description = description,
+                                            incomeAmount = amount,
+                                            date = date.time,
+                                            entryDate = formatDate(date),
+                                        )
+                                    )
+                                } else {
+                                    homeViewModel.insertExpense(
+                                        Expense(
+                                            title = title,
+                                            description = description,
+                                            expenseAmount = amount,
+                                            date = date.time,
+                                            entryDate = formatDate(date),
+                                            category = expenseCategory,
+                                        )
+                                    )
+                                }
+                                onClickOk.invoke()
                             }
                         },
                     ) {
@@ -213,7 +238,7 @@ fun PrevCustomAlertDialog() {
     JetExpenseTheme {
         AmountAlertDialog(
             showDialog = true,
-            onClickOk = { _, _, _, _, _ -> },
+            onClickOk = { },
             onClickCancel = {},
         )
     }

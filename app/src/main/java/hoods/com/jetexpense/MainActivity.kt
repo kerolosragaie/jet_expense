@@ -11,17 +11,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import hoods.com.jetexpense.core.components.AmountAlertDialog
+import hoods.com.jetexpense.presentation.home.components.AmountAlertDialog
 import hoods.com.jetexpense.core.theme.JetExpenseTheme
-import hoods.com.jetexpense.core.utils.DateFormatter.formatDate
 import hoods.com.jetexpense.data.dummy.dummyExpenseList
 import hoods.com.jetexpense.data.dummy.dummyIncomeList
-import hoods.com.jetexpense.domain.models.Expense
-import hoods.com.jetexpense.domain.models.Income
 import hoods.com.jetexpense.presentation.home.HomeScreen
 import hoods.com.jetexpense.presentation.home.viewmodel.HomeUiState
 import hoods.com.jetexpense.presentation.home.viewmodel.HomeViewModel
-import java.util.Calendar
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -35,32 +31,7 @@ class MainActivity : ComponentActivity() {
                 AmountAlertDialog(
                     showDialog = showAmountAlertDialog,
                     onClickCancel = { showAmountAlertDialog = false },
-                    onClickOk = { selectedOption, expenseCategory, title, desc, amount ->
-                        val date = Calendar.getInstance()
-
-                        if (selectedOption.lowercase() == "income")
-                            homeViewModel.insertIncome(
-                                Income(
-                                    title = title,
-                                    description = desc,
-                                    incomeAmount = amount,
-                                    date = date.time,
-                                    entryDate = formatDate(date),
-                                )
-                            )
-                        else
-                            homeViewModel.insertExpense(
-                                Expense(
-                                    title = title,
-                                    description = desc,
-                                    expenseAmount = amount,
-                                    date = date.time,
-                                    entryDate = formatDate(date),
-                                    category = expenseCategory!!,
-                                )
-                            )
-                        showAmountAlertDialog = false
-                    },
+                    onClickOk = { showAmountAlertDialog = false },
                 )
 
                 HomeScreen(
