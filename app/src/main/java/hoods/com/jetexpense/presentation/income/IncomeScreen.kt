@@ -13,7 +13,7 @@ import hoods.com.jetexpense.core.utils.getColor
 import hoods.com.jetexpense.data.dummy.dummyIncomeList
 import hoods.com.jetexpense.domain.models.Income
 import hoods.com.jetexpense.presentation.home.components.IncomeRow
-import hoods.com.jetexpense.presentation.income.components.TransactionStatement
+import hoods.com.jetexpense.core.components.TransactionStatement
 
 @Composable
 fun IncomeScreen(
