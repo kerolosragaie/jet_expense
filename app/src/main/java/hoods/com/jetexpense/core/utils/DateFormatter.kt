@@ -5,9 +5,9 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-object DateFormatter{
+object DateFormatter {
 
-     fun formatDate(
+    fun formatDate(
         date: Calendar,
     ): String {
         val c = date
@@ -17,8 +17,11 @@ object DateFormatter{
             .format(c.time)
     }
 
-    fun formatDate(date: Date): String =
-        SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    fun formatDate(
+        date: Date,
+        pattern: String = "yyyy-MM-dd",
+    ): String =
+        SimpleDateFormat(pattern, Locale.getDefault())
             .format(date)
 
     fun formatDays(days: Int) = when (days) {
