@@ -1,10 +1,7 @@
 package hoods.com.jetexpense.presentation.home
 
 import android.content.res.Configuration
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,9 +9,12 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import hoods.com.jetexpense.R
 import hoods.com.jetexpense.core.theme.JetExpenseTheme
 import hoods.com.jetexpense.data.dummy.dummyExpenseList
 import hoods.com.jetexpense.data.dummy.dummyIncomeList
@@ -30,14 +30,14 @@ fun HomeScreen(
     onSeeAllIncome: () -> Unit,
     onExpenseItemClick: (id: Int) -> Unit,
     onSeeAllExpense: () -> Unit,
-    onCLickInsertIncome:()->Unit,
-    onCLickInsertExpense:()->Unit,
+    onCLickInsert: () -> Unit,
 ) {
 
     Scaffold { contentPadding ->
         LazyColumn(
             modifier = Modifier
-                .padding(contentPadding)
+                .padding(contentPadding),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
                 AccountTotalBalance(
@@ -62,17 +62,11 @@ fun HomeScreen(
                 )
                 Spacer(modifier = Modifier.height(10.dp))
             }
-            item{
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                ){
-                    ElevatedButton(onClick = onCLickInsertIncome) {
-                        Text(text = "Insert income")
-                    }
-                    ElevatedButton(onClick = onCLickInsertExpense) {
-                        Text(text = "Insert expense")
-                    }
+            item {
+                ElevatedButton(
+                    onClick = onCLickInsert,
+                ) {
+                    Text(text = stringResource(R.string.insert).uppercase())
                 }
                 Spacer(modifier = Modifier.height(10.dp))
             }
@@ -105,8 +99,7 @@ fun PrevHomeScreen() {
             onSeeAllIncome = {},
             onExpenseItemClick = {},
             onSeeAllExpense = {},
-            onCLickInsertExpense = {},
-            onCLickInsertIncome = {},
+            onCLickInsert = {},
         )
     }
 }

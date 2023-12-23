@@ -49,12 +49,12 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun insertIncome() = viewModelScope.launch {
-        expenseRepo.insertIncome(dummyIncomeList.random())
+    fun insertIncome(income: Income) = viewModelScope.launch {
+        expenseRepo.insertIncome(income)
     }
 
-    fun insertExpense() = viewModelScope.launch {
-        expenseRepo.insertExpense(dummyExpenseList.random())
+    fun insertExpense(expense: Expense) = viewModelScope.launch {
+        expenseRepo.insertExpense(expense)
     }
 }
 

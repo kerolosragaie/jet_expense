@@ -1,4 +1,14 @@
 <resources>
     <string name="app_name">Jet Expense</string>
     <string name="see_all">See all</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">Ok</string>
+    <string name="description">Description</string>
+    <string name="amount">Amount</string>
+    <string name="title">Title</string>
+    <string name="enter_the_amount">Enter the amount</string>
+    <string name="income">Income</string>
+    <string name="expense">Expense</string>
+    <string name="category">Category</string>
+    <string name="insert">Insert</string>
 </resources>
