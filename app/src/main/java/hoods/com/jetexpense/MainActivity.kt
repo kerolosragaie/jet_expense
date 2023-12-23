@@ -4,10 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,14 +21,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val homeViewModel: HomeViewModel = hiltViewModel()
-            var showAmountAlertDialog by remember { mutableStateOf(false) }
 
             JetExpenseTheme {
-                AmountAlertDialog(
-                    showDialog = showAmountAlertDialog,
-                    onClickCancel = { showAmountAlertDialog = false },
-                    onClickOk = { showAmountAlertDialog = false },
-                )
+                AmountAlertDialog(homeViewModel = homeViewModel)
 
                 HomeScreen(
                     homeUiState = homeViewModel.homeUiState,
@@ -40,7 +31,9 @@ class MainActivity : ComponentActivity() {
                     onSeeAllIncome = {},
                     onExpenseItemClick = {},
                     onSeeAllExpense = {},
-                    onCLickInsert = { showAmountAlertDialog = true },
+                    onCLickInsert = {
+                        homeViewModel.showDialog(true)
+                    },
                 )
             }
         }

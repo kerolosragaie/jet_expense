@@ -3,7 +3,6 @@ package hoods.com.jetexpense.presentation.home.components
 import android.content.res.Configuration
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,6 +18,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -44,15 +44,14 @@ import java.util.Calendar
 
 @Composable
 fun AmountAlertDialog(
-    showDialog: Boolean,
+    homeViewModel: HomeViewModel = hiltViewModel(),
     onDismiss: (() -> Unit)? = null,
     positiveBttnTitle: String = stringResource(R.string.ok),
     negativeBttnTitle: String = stringResource(R.string.cancel),
-    onClickCancel: () -> Unit,
-    onClickOk: () -> Unit,
+    onClickCancel: (() -> Unit)? = null,
+    onClickOk: (() -> Unit)? = null,
 ) {
     val context = LocalContext.current
-    val homeViewModel: HomeViewModel = hiltViewModel()
 
     var amount by remember {
         mutableDoubleStateOf(0.0)
@@ -74,7 +73,7 @@ fun AmountAlertDialog(
         mutableStateOf(optionsList.first())
     }
 
-    if (!showDialog) {
+    if (!homeViewModel.showAmountAlertDialog.collectAsState().value) {
         title = ""
         description = ""
         expenseCategory = ""
@@ -96,130 +95,136 @@ fun AmountAlertDialog(
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier.padding(8.dp),
         ) {
-            Column(
+
+            LazyColumn(
                 modifier = Modifier.background(MaterialTheme.colorScheme.background),
             ) {
-
-                Text(
-                    modifier = Modifier.padding(8.dp),
-                    text = stringResource(R.string.enter_the_amount),
-                    style = MaterialTheme.typography.titleMedium,
-                )
-
-                LazyColumn {
-                    items(optionsList) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            RadioButton(
-                                selected = it == selectedOption,
-                                onClick = {
-                                    selectedOption = it
-                                },
-                            )
-                            Text(
-                                text = it,
-                            )
-                        }
+                item {
+                    Text(
+                        modifier = Modifier.padding(8.dp),
+                        text = stringResource(R.string.enter_the_amount),
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                }
+                items(optionsList) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        RadioButton(
+                            selected = it == selectedOption,
+                            onClick = {
+                                selectedOption = it
+                            },
+                        )
+                        Text(
+                            text = it,
+                        )
                     }
                 }
-
-                OutlinedTextField(
-                    modifier = Modifier.padding(8.dp),
-                    value = title,
-                    onValueChange = { title = it },
-                    label = {
-                        Text(stringResource(R.string.title))
-                    },
-                )
-
-                if (selectedOption.lowercase() == "expense") {
+                item {
                     OutlinedTextField(
                         modifier = Modifier.padding(8.dp),
-                        value = expenseCategory,
-                        onValueChange = { expenseCategory = it },
+                        value = title,
+                        onValueChange = { title = it },
                         label = {
-                            Text(stringResource(R.string.category))
+                            Text(stringResource(R.string.title))
                         },
                     )
                 }
-
-
-                OutlinedTextField(
-                    modifier = Modifier.padding(8.dp),
-                    value = description,
-                    onValueChange = { description = it },
-                    label = {
-                        Text(stringResource(R.string.description))
-                    },
-                )
-
-                OutlinedTextField(
-                    modifier = Modifier.padding(8.dp),
-                    value = amount.toString(),
-                    onValueChange = { amount = it.toDouble() },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    label = {
-                        Text(stringResource(R.string.amount))
-                    },
-                )
-
-                Row {
-                    OutlinedButton(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                            .weight(1F),
-                        onClick = onClickCancel,
-                    ) {
-                        Text(text = negativeBttnTitle)
-                    }
-
-                    Button(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                            .weight(1F),
-                        onClick = {
-                            if (title.isBlank() || description.isBlank() || amount <= 0.0) {
-                                Toast.makeText(
-                                    context,
-                                    "Please fill all the fields.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            } else {
-                                val date = Calendar.getInstance()
-
-                                if (selectedOption.lowercase() == "income") {
-                                    homeViewModel.insertIncome(
-                                        Income(
-                                            title = title,
-                                            description = description,
-                                            incomeAmount = amount,
-                                            date = date.time,
-                                            entryDate = formatDate(date),
-                                        )
-                                    )
-                                } else {
-                                    homeViewModel.insertExpense(
-                                        Expense(
-                                            title = title,
-                                            description = description,
-                                            expenseAmount = amount,
-                                            date = date.time,
-                                            entryDate = formatDate(date),
-                                            category = expenseCategory,
-                                        )
-                                    )
-                                }
-                                onClickOk.invoke()
-                            }
-                        },
-                    ) {
-                        Text(text = positiveBttnTitle)
+                if (selectedOption.lowercase() == "expense") {
+                    item {
+                        OutlinedTextField(
+                            modifier = Modifier.padding(8.dp),
+                            value = expenseCategory,
+                            onValueChange = { expenseCategory = it },
+                            label = {
+                                Text(stringResource(R.string.category))
+                            },
+                        )
                     }
                 }
+                item {
+                    OutlinedTextField(
+                        modifier = Modifier.padding(8.dp),
+                        value = description,
+                        onValueChange = { description = it },
+                        label = {
+                            Text(stringResource(R.string.description))
+                        },
+                    )
+                }
+                item {
+                    OutlinedTextField(
+                        modifier = Modifier.padding(8.dp),
+                        value = amount.toString(),
+                        onValueChange = { amount = it.toDouble() },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        label = {
+                            Text(stringResource(R.string.amount))
+                        },
+                    )
+                }
+                item {
+                    Row {
+                        OutlinedButton(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                                .weight(1F),
+                            onClick = {
+                                onClickCancel?.invoke()
+                                homeViewModel.showDialog(false)
+                            },
+                        ) {
+                            Text(text = negativeBttnTitle)
+                        }
 
+                        Button(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                                .weight(1F),
+                            onClick = {
+                                if (title.isBlank() || description.isBlank() || amount <= 0.0) {
+                                    Toast.makeText(
+                                        context,
+                                        "Please fill all the fields.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } else {
+                                    val date = Calendar.getInstance()
 
+                                    if (selectedOption.lowercase() == "income") {
+                                        homeViewModel.insertIncome(
+                                            Income(
+                                                title = title,
+                                                description = description,
+                                                incomeAmount = amount,
+                                                date = date.time,
+                                                entryDate = formatDate(date),
+                                            )
+                                        )
+                                    } else {
+                                        homeViewModel.insertExpense(
+                                            Expense(
+                                                title = title,
+                                                description = description,
+                                                expenseAmount = amount,
+                                                date = date.time,
+                                                entryDate = formatDate(date),
+                                                category = expenseCategory,
+                                            )
+                                        )
+                                    }
+                                    onClickOk?.invoke()
+                                    homeViewModel.showDialog(false)
+                                }
+                            },
+                        ) {
+                            Text(text = positiveBttnTitle)
+                        }
+                    }
+                }
             }
+
         }
     }
 
@@ -236,10 +241,6 @@ fun AmountAlertDialog(
 @Composable
 fun PrevCustomAlertDialog() {
     JetExpenseTheme {
-        AmountAlertDialog(
-            showDialog = true,
-            onClickOk = { },
-            onClickCancel = {},
-        )
+        AmountAlertDialog()
     }
 }
