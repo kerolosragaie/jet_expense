@@ -171,7 +171,7 @@ fun AmountAlertDialog(
                                 .weight(1F),
                             onClick = {
                                 onClickCancel?.invoke()
-                                homeViewModel.showDialog(false)
+                                homeViewModel.showAmountAlertDialog.value = false
                             },
                         ) {
                             Text(text = negativeBttnTitle)
@@ -215,7 +215,7 @@ fun AmountAlertDialog(
                                         )
                                     }
                                     onClickOk?.invoke()
-                                    homeViewModel.showDialog(false)
+                                    homeViewModel.showAmountAlertDialog.value = false
                                 }
                             },
                         ) {

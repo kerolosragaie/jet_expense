@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
                     onExpenseItemClick = {},
                     onSeeAllExpense = {},
                     onCLickInsert = {
-                        homeViewModel.showDialog(true)
+                        homeViewModel.showAmountAlertDialog.value = true
                     },
                 )
             }

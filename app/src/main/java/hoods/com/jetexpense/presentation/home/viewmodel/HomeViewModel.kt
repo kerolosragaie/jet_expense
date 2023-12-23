@@ -10,7 +10,6 @@ import hoods.com.jetexpense.domain.models.Expense
 import hoods.com.jetexpense.domain.models.Income
 import hoods.com.jetexpense.domain.repo.ExpenseRepo
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
@@ -25,8 +24,7 @@ class HomeViewModel @Inject constructor(
     var homeUiState by mutableStateOf(HomeUiState())
         private set
 
-    private val _showAmountAlertDialog: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val showAmountAlertDialog: StateFlow<Boolean> = _showAmountAlertDialog
+    val showAmountAlertDialog: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     init {
         viewModelScope.launch {
@@ -57,10 +55,6 @@ class HomeViewModel @Inject constructor(
 
     fun insertExpense(expense: Expense) = viewModelScope.launch {
         expenseRepo.insertExpense(expense)
-    }
-
-    fun showDialog(state: Boolean) = viewModelScope.launch {
-        _showAmountAlertDialog.emit(state)
     }
 }
 
