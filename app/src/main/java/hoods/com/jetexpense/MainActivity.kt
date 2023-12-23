@@ -13,7 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import hoods.com.jetexpense.core.components.AmountAlertDialog
 import hoods.com.jetexpense.core.theme.JetExpenseTheme
-import hoods.com.jetexpense.core.utils.DateFormatter
+import hoods.com.jetexpense.core.utils.DateFormatter.formatDate
 import hoods.com.jetexpense.data.dummy.dummyExpenseList
 import hoods.com.jetexpense.data.dummy.dummyIncomeList
 import hoods.com.jetexpense.domain.models.Expense
@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
                                     description = desc,
                                     incomeAmount = amount,
                                     date = date.time,
-                                    entryDate = DateFormatter.formatDate(date),
+                                    entryDate = formatDate(date),
                                 )
                             )
                         else
@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
                                     description = desc,
                                     expenseAmount = amount,
                                     date = date.time,
-                                    entryDate = DateFormatter.formatDate(date),
+                                    entryDate = formatDate(date),
                                     category = expenseCategory!!,
                                 )
                             )
