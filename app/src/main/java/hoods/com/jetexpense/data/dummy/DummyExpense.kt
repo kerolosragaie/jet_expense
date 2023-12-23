@@ -5,7 +5,8 @@ import hoods.com.jetexpense.domain.models.Expense
 
 val dummyExpenseList = listOf(
     Expense(
-        entryDate =formatDate(date),
+        id = 0,
+        entryDate = formatDate(date),
         expenseAmount = 50.0,
         category = "entertainment",
         title = "Netflix Subscription",
@@ -14,7 +15,8 @@ val dummyExpenseList = listOf(
         date = date.time
     ),
     Expense(
-        entryDate =formatDate(date),
+        id = 1,
+        entryDate = formatDate(date),
         expenseAmount = 100.0,
         category = "Food and Drinks",
         title = "Groceries",
@@ -22,7 +24,8 @@ val dummyExpenseList = listOf(
         date = date.time
     ),
     Expense(
-        entryDate =formatDate(date),
+        id = 2,
+        entryDate = formatDate(date),
         expenseAmount = 500.0,
         category = "Vehicle",
         title = "Car Maintenance",
@@ -30,7 +33,8 @@ val dummyExpenseList = listOf(
         date = date.time
     ),
     Expense(
-        entryDate =formatDate(date),
+        id = 3,
+        entryDate = formatDate(date),
         expenseAmount = 1000.0,
         category = "Housing",
         title = "Rent",
@@ -38,6 +42,7 @@ val dummyExpenseList = listOf(
         date = date.time
     ),
     Expense(
+        id = 4,
         entryDate = formatDate(date),
         expenseAmount = 100.0,
         category = "Tech",
