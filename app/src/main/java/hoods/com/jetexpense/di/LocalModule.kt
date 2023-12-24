@@ -2,12 +2,10 @@ package hoods.com.jetexpense.di
 
 import android.content.Context
 import androidx.room.Room
-import androidx.room.RoomDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.android.scopes.ViewModelScoped
 import dagger.hilt.components.SingletonComponent
 import hoods.com.jetexpense.data.local.dao.ExpenseDao
 import hoods.com.jetexpense.data.local.dao.IncomeDao
