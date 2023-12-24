@@ -12,22 +12,22 @@ import hoods.com.jetexpense.core.utils.Util
 import hoods.com.jetexpense.core.utils.getColor
 import hoods.com.jetexpense.core.components.TransactionStatement
 import hoods.com.jetexpense.data.dummy.dummyExpenseList
-import hoods.com.jetexpense.domain.models.Expense
+import hoods.com.jetexpense.presentation.expense.viewmodel.ExpenseUiState
 import hoods.com.jetexpense.presentation.home.components.ExpenseRow
 
 @Composable
 fun ExpenseScreen(
     modifier: Modifier = Modifier,
-    expenseList: List<Expense>,
+    expenseUiState: ExpenseUiState,
     onExpenseItemClick: (id: Int) -> Unit,
     onExpenseItemDelete: (id: Int) -> Unit,
 ) {
     TransactionStatement(
         modifier = modifier,
-        items = expenseList,
+        items = expenseUiState.expenseList,
         colors = { getColor(it.expenseAmount.toFloat(), Util.expenseColor) },
         amounts = { it.expenseAmount.toFloat() },
-        amountsTotal = expenseList.sumOf { it.expenseAmount }.toFloat(),
+        amountsTotal = expenseUiState.expenseList.sumOf { it.expenseAmount }.toFloat(),
         circleLabel = stringResource(R.string.pay),
         onItemSwiped = { item ->
             onExpenseItemDelete.invoke(item.id)
@@ -53,9 +53,11 @@ fun ExpenseScreen(
 @Preview(showSystemUi = true)
 @Composable
 fun PrevExpenseScreen() {
+    val expenseUiState = ExpenseUiState(dummyExpenseList)
+
     JetExpenseTheme {
         ExpenseScreen(
-            expenseList = dummyExpenseList,
+            expenseUiState = expenseUiState,
             onExpenseItemClick = {},
             onExpenseItemDelete = {},
         )

@@ -11,23 +11,23 @@ import hoods.com.jetexpense.core.utils.DateFormatter.formatDate
 import hoods.com.jetexpense.core.utils.Util
 import hoods.com.jetexpense.core.utils.getColor
 import hoods.com.jetexpense.data.dummy.dummyIncomeList
-import hoods.com.jetexpense.domain.models.Income
 import hoods.com.jetexpense.presentation.home.components.IncomeRow
 import hoods.com.jetexpense.core.components.TransactionStatement
+import hoods.com.jetexpense.presentation.income.viewmodel.IncomeUiState
 
 @Composable
 fun IncomeScreen(
     modifier: Modifier = Modifier,
-    incomesList: List<Income>,
+    incomeUiState: IncomeUiState,
     onIncomeItemClick: (id: Int) -> Unit,
     onIncomeItemDelete: (id: Int) -> Unit,
 ) {
     TransactionStatement(
         modifier = modifier,
-        items = incomesList,
+        items = incomeUiState.incomesList,
         colors = { getColor(it.incomeAmount.toFloat(), Util.incomeColor) },
         amounts = { it.incomeAmount.toFloat() },
-        amountsTotal = incomesList.sumOf { it.incomeAmount }.toFloat(),
+        amountsTotal = incomeUiState.incomesList.sumOf { it.incomeAmount }.toFloat(),
         circleLabel = stringResource(R.string.receive),
         onItemSwiped = { item ->
             onIncomeItemDelete.invoke(item.id)
@@ -35,9 +35,14 @@ fun IncomeScreen(
         key = { it.id },
     ) {
         IncomeRow(
-            modifier= Modifier.clickable { onIncomeItemClick.invoke(it.id)},
+            modifier = Modifier.clickable { onIncomeItemClick.invoke(it.id) },
             name = it.title,
-            description = "${stringResource(R.string.receive)}: ${formatDate(it.date, pattern = "dd/MM/YYY")}",
+            description = "${stringResource(R.string.receive)}: ${
+                formatDate(
+                    it.date,
+                    pattern = "dd/MM/YYY"
+                )
+            }",
             amount = it.incomeAmount.toFloat(),
             color = getColor(it.incomeAmount.toFloat(), Util.incomeColor),
         )
@@ -48,13 +53,17 @@ fun IncomeScreen(
 @Preview(showSystemUi = true)
 @Composable
 fun PrevIncomeScreen() {
+    val incomeUiState = IncomeUiState(dummyIncomeList)
+
     JetExpenseTheme {
         IncomeScreen(
-            incomesList = dummyIncomeList,
+            incomeUiState = incomeUiState,
             onIncomeItemClick = {
 
             },
-            onIncomeItemDelete = {},
+            onIncomeItemDelete = {
+
+            },
         )
     }
 }

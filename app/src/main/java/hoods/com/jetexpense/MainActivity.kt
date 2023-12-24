@@ -3,37 +3,33 @@ package hoods.com.jetexpense
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import hoods.com.jetexpense.presentation.home.components.AmountAlertDialog
+import hoods.com.jetexpense.core.navigation.NavigationGraph
 import hoods.com.jetexpense.core.theme.JetExpenseTheme
 import hoods.com.jetexpense.data.dummy.dummyExpenseList
 import hoods.com.jetexpense.data.dummy.dummyIncomeList
 import hoods.com.jetexpense.presentation.home.HomeScreen
 import hoods.com.jetexpense.presentation.home.viewmodel.HomeUiState
-import hoods.com.jetexpense.presentation.home.viewmodel.HomeViewModel
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val homeViewModel: HomeViewModel = hiltViewModel()
-
+            val navHostController = rememberNavController()
             JetExpenseTheme {
-                AmountAlertDialog(homeViewModel = homeViewModel)
-
-                HomeScreen(
-                    homeUiState = homeViewModel.homeUiState,
-                    onIncomeItemClick = {},
-                    onSeeAllIncome = {},
-                    onExpenseItemClick = {},
-                    onSeeAllExpense = {},
-                    onCLickInsert = {
-                        homeViewModel.showAmountAlertDialog.value = true
-                    },
+                NavigationGraph(
+                    modifier = Modifier.padding(10.dp),
+                    navHostController = navHostController,
                 )
             }
         }

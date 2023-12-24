@@ -26,6 +26,7 @@ import hoods.com.jetexpense.presentation.home.viewmodel.HomeUiState
 
 @Composable
 fun HomeScreen(
+    modifier: Modifier = Modifier,
     homeUiState: HomeUiState,
     onIncomeItemClick: (id: Int) -> Unit,
     onSeeAllIncome: () -> Unit,
@@ -34,7 +35,9 @@ fun HomeScreen(
     onCLickInsert: () -> Unit,
 ) {
 
-    Scaffold { contentPadding ->
+    Scaffold(
+        modifier = modifier,
+    ) { contentPadding ->
         LazyColumn(
             modifier = Modifier
                 .padding(contentPadding),
