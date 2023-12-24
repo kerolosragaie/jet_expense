@@ -1,4 +1,4 @@
-package hoods.com.jetexpense.presentation.income.viewmodel
+package hoods.com.jetexpense.presentation.expense.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,31 +13,27 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class IncomeViewModel @Inject constructor(
+class ExpenseViewModel @Inject constructor(
     private val expenseRepo: ExpenseRepo,
 ) : ViewModel() {
-
-    var incomeUiState by mutableStateOf(IncomeUiState())
-            private set
-
+    var expenseUiState by mutableStateOf(ExpenseUiState())
+        private set
 
     init {
-        getAllIncome()
+        getAllExpense()
     }
 
-    fun getAllIncome() = viewModelScope.launch {
-        if (expenseRepo.income is ResultState.Success) {
-            expenseRepo.income.data!!.collectLatest {
-                incomeUiState = incomeUiState.copy(
-                    incomesList = it
+    fun getAllExpense() = viewModelScope.launch {
+        if (expenseRepo.expense is ResultState.Success) {
+            expenseRepo.expense.data!!.collectLatest {
+                expenseUiState = expenseUiState.copy(
+                    expenseList = it
                 )
             }
         }
     }
 
-    fun deleteIncome(id:Int)=viewModelScope.launch {
-        expenseRepo.deleteIncome(id)
+    fun deleteExpense(id: Int) = viewModelScope.launch {
+        expenseRepo.deleteExpense(id)
     }
-
 }
-
