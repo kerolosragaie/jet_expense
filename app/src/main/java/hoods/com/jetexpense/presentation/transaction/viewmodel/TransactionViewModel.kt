@@ -57,6 +57,27 @@ class TransactionViewModel @AssistedInject constructor(
                 category = category.title,
             )
         }
+    override val isFieldsNotEmpty: Boolean
+        get() = state.title.isNotEmpty() &&
+                state.description.isNotEmpty() &&
+                state.amount.isNotEmpty()
+
+    init {
+        state = if (transactionId != -1) {
+            when (transactionType) {
+                TransactionType.INCOME -> {
+                    getIncome(transactionId)
+                }
+
+                TransactionType.EXPENSE -> {
+                    getExpense(transactionId)
+                }
+            }
+            state.copy(isUpdatingTransaction = true)
+        } else {
+            state.copy(isUpdatingTransaction = false)
+        }
+    }
 
     override fun onTitleChange(newValue: String) {
         state = state.copy(

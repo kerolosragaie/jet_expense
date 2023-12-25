@@ -16,4 +16,6 @@
     <string name="transaction_title">Transaction title</string>
     <string name="submit">Submit</string>
     <string name="dismiss">Dismiss</string>
+    <string name="update_transaction">Update transaction</string>
+    <string name="add_transaction">Add transaction</string>
 </resources>

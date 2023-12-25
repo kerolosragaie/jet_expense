@@ -4,6 +4,7 @@ import hoods.com.jetexpense.core.navigation.Screen
 import hoods.com.jetexpense.core.utils.Category
 
 interface TransactionCallBack {
+    val isFieldsNotEmpty: Boolean
     fun onTitleChange(newValue: String)
     fun onAmountChange(newValue: String)
     fun onDescriptionChange(newValue: String)

@@ -24,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import hoods.com.jetexpense.R
 import hoods.com.jetexpense.core.theme.JetExpenseTheme
 import hoods.com.jetexpense.core.utils.Category
+import hoods.com.jetexpense.presentation.transaction.MockTransactionCallBacks
 import hoods.com.jetexpense.presentation.transaction.viewmodel.TransactionCallBack
 import hoods.com.jetexpense.presentation.transaction.viewmodel.TransactionState
 import hoods.com.jetexpense.presentation.transaction.viewmodel.TransactionViewModel
@@ -84,15 +85,14 @@ fun TransactionDetails(
 }
 
 
-@Preview(showBackground = true)
+@Preview(showSystemUi = true)
 @Composable
 fun PrevTransactionScreen() {
-    val transactionViewModel: TransactionViewModel = hiltViewModel()
     JetExpenseTheme {
         TransactionDetails(
             state = TransactionState(),
             isExpenseTransaction = true,
-            transactionCallBack = transactionViewModel,
+            transactionCallBack = MockTransactionCallBacks(),
         )
     }
 }
