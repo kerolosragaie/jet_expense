@@ -10,17 +10,47 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import hoods.com.jetexpense.R
 import hoods.com.jetexpense.core.navigation.Screen
 import hoods.com.jetexpense.core.theme.JetExpenseTheme
 import hoods.com.jetexpense.presentation.transaction.components.TransactionButton
 import hoods.com.jetexpense.presentation.transaction.components.TransactionDetails
 import hoods.com.jetexpense.presentation.transaction.components.TransactionPopupTitle
+import hoods.com.jetexpense.presentation.transaction.viewmodel.TransactionAssistedFactory
 import hoods.com.jetexpense.presentation.transaction.viewmodel.TransactionCallBack
 import hoods.com.jetexpense.presentation.transaction.viewmodel.TransactionState
+import hoods.com.jetexpense.presentation.transaction.viewmodel.TransactionViewModel
+import hoods.com.jetexpense.presentation.transaction.viewmodel.TransactionViewModelFactory
+
 
 @Composable
 fun TransactionScreen(
+    modifier: Modifier,
+    transactionId: Int,
+    transactionType: String,
+    assistedFactory: TransactionAssistedFactory,
+    navigateUp: () -> Unit,
+) {
+    val viewModel = viewModel(
+        modelClass = TransactionViewModel::class.java,
+        factory = TransactionViewModelFactory(
+            id = transactionId,
+            transactionType = transactionType,
+            assistedFactory = assistedFactory,
+        )
+    )
+
+    TransactionScreen(
+        modifier = modifier,
+        state = viewModel.state,
+        transactionCallBack = viewModel,
+        navigateUp = navigateUp,
+    )
+}
+
+@Composable
+private fun TransactionScreen(
     modifier: Modifier,
     state: TransactionState,
     transactionCallBack: TransactionCallBack,

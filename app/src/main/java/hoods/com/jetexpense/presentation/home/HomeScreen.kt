@@ -1,6 +1,7 @@
 package hoods.com.jetexpense.presentation.home
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,7 +20,6 @@ import hoods.com.jetexpense.core.theme.JetExpenseTheme
 import hoods.com.jetexpense.data.dummy.dummyExpenseList
 import hoods.com.jetexpense.data.dummy.dummyIncomeList
 import hoods.com.jetexpense.presentation.home.components.AccountTotalBalance
-import hoods.com.jetexpense.presentation.home.components.AmountAlertDialog
 import hoods.com.jetexpense.presentation.home.components.ExpenseCard
 import hoods.com.jetexpense.presentation.home.components.IncomeCard
 import hoods.com.jetexpense.presentation.home.viewmodel.HomeUiState
@@ -28,9 +28,9 @@ import hoods.com.jetexpense.presentation.home.viewmodel.HomeUiState
 fun HomeScreen(
     modifier: Modifier = Modifier,
     homeUiState: HomeUiState,
-    onIncomeItemClick: (id: Int) -> Unit,
+    onIncomeItemClick: (incomeId: Int) -> Unit,
     onSeeAllIncome: () -> Unit,
-    onExpenseItemClick: (id: Int) -> Unit,
+    onExpenseItemClick: (expenseId: Int) -> Unit,
     onSeeAllExpense: () -> Unit,
     onCLickInsert: () -> Unit,
 ) {
@@ -53,7 +53,7 @@ fun HomeScreen(
             item {
                 IncomeCard(
                     homeUiState = homeUiState,
-                    onClickItem = onIncomeItemClick,
+                    onIncomeItemClick = onIncomeItemClick,
                     onClickSeeAll = onSeeAllIncome,
                 )
                 Spacer(modifier = Modifier.height(10.dp))

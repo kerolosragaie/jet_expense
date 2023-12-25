@@ -14,6 +14,8 @@ import hoods.com.jetexpense.presentation.home.components.AmountAlertDialog
 import hoods.com.jetexpense.presentation.home.viewmodel.HomeViewModel
 import hoods.com.jetexpense.presentation.income.IncomeScreen
 import hoods.com.jetexpense.presentation.income.viewmodel.IncomeViewModel
+import hoods.com.jetexpense.presentation.transaction.TransactionScreen
+import hoods.com.jetexpense.presentation.transaction.viewmodel.TransactionAssistedFactory
 
 @Composable
 fun NavigationGraph(
@@ -22,6 +24,7 @@ fun NavigationGraph(
     homeViewModel: HomeViewModel = hiltViewModel(),
     expenseViewModel: ExpenseViewModel = hiltViewModel(),
     incomeViewModel: IncomeViewModel = hiltViewModel(),
+    transactionAssistedFactory: TransactionAssistedFactory,
 ) {
     NavHost(
         navController = navHostController,
@@ -29,13 +32,23 @@ fun NavigationGraph(
     ) {
         composable(Screen.Home.route) {
 
-            AmountAlertDialog(homeViewModel = homeViewModel)
+            // AmountAlertDialog(homeViewModel = homeViewModel)
 
             HomeScreen(
                 modifier = modifier,
                 homeUiState = homeViewModel.homeUiState,
-                onIncomeItemClick = {},
-                onExpenseItemClick = {},
+                onIncomeItemClick = { incomeId ->
+                    navHostController.navigateToTransactionScreen(
+                        id = incomeId,
+                        transactionType = Screen.Income.route,
+                    )
+                },
+                onExpenseItemClick = { expenseId ->
+                    navHostController.navigateToTransactionScreen(
+                        id = expenseId,
+                        transactionType = Screen.Expense.route,
+                    )
+                },
                 onSeeAllIncome = {
                     navHostController.navigateToSingleTop(Screen.Income.route)
                 },
@@ -43,7 +56,8 @@ fun NavigationGraph(
                     navHostController.navigateToSingleTop(Screen.Expense.route)
                 },
                 onCLickInsert = {
-                    homeViewModel.showAmountAlertDialog.value = true
+                    //homeViewModel.showAmountAlertDialog.value = true
+                    navHostController.navigateToTransactionScreen()
                 },
             )
         }
@@ -54,7 +68,10 @@ fun NavigationGraph(
                 modifier = modifier,
                 expenseUiState = expenseViewModel.expenseUiState,
                 onExpenseItemClick = { expenseId ->
-
+                    navHostController.navigateToTransactionScreen(
+                        id = expenseId,
+                        transactionType = Screen.Expense.route,
+                    )
                 },
                 onExpenseItemDelete = { expenseId ->
                     expenseViewModel.deleteExpense(expenseId)
@@ -67,11 +84,36 @@ fun NavigationGraph(
                 modifier = modifier,
                 incomeUiState = incomeViewModel.incomeUiState,
                 onIncomeItemClick = { incomeId ->
+                    navHostController.navigateToTransactionScreen(
+                        id = incomeId,
+                        transactionType = Screen.Income.route,
+                    )
                 },
                 onIncomeItemDelete = { incomeId ->
                     incomeViewModel.deleteIncome(incomeId)
                 },
             )
+        }
+
+        composable(
+            route = Screen.Transaction.routeWithArgs,
+            arguments = Screen.Transaction.arguments,
+        ) { navBackStackEntry ->
+            val transType =
+                navBackStackEntry.arguments?.getString(Screen.Transaction.transactionTypeArg) ?: ""
+            val transId = navBackStackEntry.arguments?.getInt(Screen.Transaction.idTypeArg) ?: -1
+
+            TransactionScreen(
+                modifier = modifier,
+                transactionId = transId,
+                transactionType = transType,
+                assistedFactory = transactionAssistedFactory,
+                navigateUp = {
+                    homeViewModel.getIncomeAndExpense()
+                    navHostController.navigateUp()
+                }
+            )
+
         }
     }
 
@@ -84,5 +126,15 @@ fun NavHostController.navigateToSingleTop(route: String) {
         launchSingleTop = true
         restoreState = true
     }
+}
+
+fun NavHostController.navigateToTransactionScreen(
+    id: Int = -1,
+    transactionType: String = ""
+) {
+    val route =
+        "${Screen.Transaction.route}?${Screen.Transaction.transactionTypeArg}=$transactionType&${Screen.Transaction.idTypeArg}=$id"
+
+    navigateToSingleTop(route)
 }
 

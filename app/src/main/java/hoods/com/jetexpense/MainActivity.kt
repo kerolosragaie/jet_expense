@@ -3,10 +3,7 @@ package hoods.com.jetexpense
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,9 +16,14 @@ import hoods.com.jetexpense.data.dummy.dummyExpenseList
 import hoods.com.jetexpense.data.dummy.dummyIncomeList
 import hoods.com.jetexpense.presentation.home.HomeScreen
 import hoods.com.jetexpense.presentation.home.viewmodel.HomeUiState
+import hoods.com.jetexpense.presentation.transaction.viewmodel.TransactionAssistedFactory
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var transactionAssistedFactory: TransactionAssistedFactory
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -30,6 +32,7 @@ class MainActivity : ComponentActivity() {
                 NavigationGraph(
                     modifier = Modifier.padding(10.dp),
                     navHostController = navHostController,
+                    transactionAssistedFactory = transactionAssistedFactory,
                 )
             }
         }

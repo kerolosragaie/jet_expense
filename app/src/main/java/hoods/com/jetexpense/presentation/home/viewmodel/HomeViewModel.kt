@@ -27,24 +27,26 @@ class HomeViewModel @Inject constructor(
     val showAmountAlertDialog: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     init {
-        viewModelScope.launch {
-            if (income.data != null && expense.data != null) {
-                combine(
-                    income.data,
-                    expense.data
-                ) { incomeList: List<Income>, expenseList: List<Expense>
-                    ->
-                    homeUiState.copy(
-                        incomeList = incomeList,
-                        expenseList = expenseList,
-                        totalExpense = expenseList
-                            .sumOf { it.expenseAmount }.toFloat(),
-                        totalIncome = incomeList
-                            .sumOf { it.incomeAmount }.toFloat(),
-                    )
-                }.collectLatest { newHomeUiState ->
-                    homeUiState = newHomeUiState
-                }
+        getIncomeAndExpense()
+    }
+
+    fun getIncomeAndExpense() = viewModelScope.launch {
+        if (income.data != null && expense.data != null) {
+            combine(
+                income.data,
+                expense.data
+            ) { incomeList: List<Income>, expenseList: List<Expense>
+                ->
+                homeUiState.copy(
+                    incomeList = incomeList,
+                    expenseList = expenseList,
+                    totalExpense = expenseList
+                        .sumOf { it.expenseAmount }.toFloat(),
+                    totalIncome = incomeList
+                        .sumOf { it.incomeAmount }.toFloat(),
+                )
+            }.collectLatest { newHomeUiState ->
+                homeUiState = newHomeUiState
             }
         }
     }

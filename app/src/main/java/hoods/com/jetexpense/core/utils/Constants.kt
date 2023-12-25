@@ -4,4 +4,5 @@ object Constants {
     const val HOME_SCREEN = "home_screen"
     const val INCOME_SCREEN = "income_screen"
     const val EXPENSE_SCREEN = "expense_screen"
+    const val TRANSACTION_SCREEN = "transaction_screen"
 }

@@ -1,5 +1,6 @@
 package hoods.com.jetexpense.presentation.transaction.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -9,7 +10,6 @@ import androidx.lifecycle.viewModelScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import dagger.hilt.android.lifecycle.HiltViewModel
 import hoods.com.jetexpense.core.navigation.Screen
 import hoods.com.jetexpense.core.utils.Category
 import hoods.com.jetexpense.core.utils.DateFormatter.formatDate
@@ -20,15 +20,10 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Date
 
-enum class TransactionType {
-    INCOME,
-    EXPENSE,
-}
-
 class TransactionViewModel @AssistedInject constructor(
     private val expenseRepo: ExpenseRepo,
     @Assisted private val transactionId: Int,
-    @Assisted private val transactionType: TransactionType,
+    @Assisted private val transactionType: String,
 ) : ViewModel(), TransactionCallBack {
 
     var state by mutableStateOf(TransactionState())
@@ -62,15 +57,21 @@ class TransactionViewModel @AssistedInject constructor(
                 state.description.isNotEmpty() &&
                 state.amount.isNotEmpty()
 
+    companion object {
+        const val TAG = "transaction"
+    }
     init {
         state = if (transactionId != -1) {
             when (transactionType) {
-                TransactionType.INCOME -> {
+                Screen.Income.route -> {
                     getIncome(transactionId)
                 }
 
-                TransactionType.EXPENSE -> {
+                Screen.Expense.route -> {
                     getExpense(transactionId)
+                }
+                else -> {
+                    Log.i(TAG, "no route passed: $transactionType")
                 }
             }
             state.copy(isUpdatingTransaction = true)
@@ -202,10 +203,10 @@ data class TransactionState(
 )
 
 @Suppress("UNCHECKED_CAST")
-private class TransactionViewModelFactory(
+class TransactionViewModelFactory(
     private val assistedFactory: TransactionAssistedFactory,
     private val id: Int,
-    private val transactionType: TransactionType?,
+    private val transactionType: String?,
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return assistedFactory.create(id, transactionType) as T
@@ -214,6 +215,6 @@ private class TransactionViewModelFactory(
 
 @AssistedFactory
 interface TransactionAssistedFactory {
-    fun create(id: Int, transactionType: TransactionType?): TransactionViewModel
+    fun create(id: Int, transactionType: String?): TransactionViewModel
 }
 

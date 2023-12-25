@@ -53,7 +53,12 @@ fun DateSelector(
             DatePickerDialog(
                 onDismissRequest = { openDateDialog = false },
                 confirmButton = {
-                    Button(onClick = { onDateChange(datePickerState.selectedDateMillis) }) {
+                    Button(
+                        onClick = {
+                            onDateChange(datePickerState.selectedDateMillis)
+                            openDateDialog = false
+                        },
+                    ) {
                         Text(text = stringResource(R.string.submit))
                     }
                 },
