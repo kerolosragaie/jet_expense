@@ -44,16 +44,17 @@ fun TransactionPopupTitle(
         Spacer(modifier = Modifier.width(6.dp))
         Text(text = state.transactionScreen.pageTitle)
         Spacer(modifier = Modifier.width(6.dp))
-        IconButton(
-            onClick = { transactionCallBack.onOpenDialog(!state.openDialog) }
-        ) {
-            Icon(
-                imageVector = Icons.Default.KeyboardArrowDown,
-                contentDescription = null,
-            )
-        }
+        if (!state.isUpdatingTransaction)
+            IconButton(
+                onClick = { transactionCallBack.onOpenDialog(!state.openDialog) }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowDown,
+                    contentDescription = null,
+                )
+            }
         //Show or hide popup
-        if (!state.openDialog) {
+        if (!state.openDialog && !state.isUpdatingTransaction) {
             Popup(
                 onDismissRequest = {
                     transactionCallBack.onOpenDialog(!state.openDialog)
