@@ -5,15 +5,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import hoods.com.jetexpense.core.theme.JetExpenseTheme
 
 @Composable
-fun HomeScreen() {
+fun TransactionScreen() {
 
 }
 
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-fun PrevHomeScreen() {
+fun PrevTransactionScreen() {
     JetExpenseTheme {
-        HomeScreen()
+        TransactionScreen()
     }
 }

@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hoods.com.jetexpense.core.navigation.Screen
 import hoods.com.jetexpense.core.utils.Category
@@ -18,24 +19,22 @@ import hoods.com.jetexpense.domain.repo.ExpenseRepo
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Date
-import javax.inject.Inject
 
 enum class TransactionType {
     INCOME,
     EXPENSE,
 }
 
-@HiltViewModel
-class TransactionViewModel @Inject constructor(
+class TransactionViewModel @AssistedInject constructor(
     private val expenseRepo: ExpenseRepo,
     @Assisted private val transactionId: Int,
     @Assisted private val transactionType: TransactionType,
 ) : ViewModel(), TransactionCallBack {
 
-    var transactionState by mutableStateOf(TransactionState())
+    var state by mutableStateOf(TransactionState())
         private set
     val income: Income
-        get() = transactionState.run {
+        get() = state.run {
             Income(
                 id = id,
                 title = title,
@@ -47,7 +46,7 @@ class TransactionViewModel @Inject constructor(
         }
 
     val expense: Expense
-        get() = transactionState.run {
+        get() = state.run {
             Expense(
                 id = id,
                 title = title,
@@ -60,46 +59,52 @@ class TransactionViewModel @Inject constructor(
         }
 
     override fun onTitleChange(newValue: String) {
-        transactionState = transactionState.copy(
+        state = state.copy(
             title = newValue
         )
     }
 
     override fun onAmountChange(newValue: String) {
-        transactionState = transactionState.copy(
+        state = state.copy(
             amount = newValue
         )
     }
 
     override fun onDescriptionChange(newValue: String) {
-        transactionState = transactionState.copy(
+        state = state.copy(
             description = newValue
         )
     }
 
     override fun onTransactionTypeChange(newValue: String) {
-        transactionState = transactionState.copy(
+        state = state.copy(
             title = newValue
         )
     }
 
     override fun onDateChange(newValue: Long?) {
         newValue?.let {
-            transactionState = transactionState.copy(
+            state = state.copy(
                 date = Date(it)
             )
         }
     }
 
     override fun onScreenTypeChange(newValue: Screen) {
-        transactionState = transactionState.copy(
+        state = state.copy(
             transactionScreen = newValue
         )
     }
 
     override fun onOpenDialog(newValue: Boolean) {
-        transactionState = transactionState.copy(
+        state = state.copy(
             openDialog = newValue
+        )
+    }
+
+    override fun onCategoryChange(newValue: Category) {
+        state = state.copy(
+            category = newValue
         )
     }
 
@@ -118,7 +123,7 @@ class TransactionViewModel @Inject constructor(
     override fun getIncome(id: Int) {
         viewModelScope.launch {
             expenseRepo.getIncomeById(id).data!!.collectLatest {
-                transactionState = transactionState.copy(
+                state = state.copy(
                     id = it.id,
                     title = it.title,
                     description = it.description,
@@ -133,7 +138,7 @@ class TransactionViewModel @Inject constructor(
     override fun getExpense(id: Int) {
         viewModelScope.launch {
             expenseRepo.getExpenseById(id).data!!.collectLatest {
-                transactionState = transactionState.copy(
+                state = state.copy(
                     id = it.id,
                     title = it.title,
                     description = it.description,

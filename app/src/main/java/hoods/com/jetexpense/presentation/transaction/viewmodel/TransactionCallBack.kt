@@ -1,6 +1,7 @@
 package hoods.com.jetexpense.presentation.transaction.viewmodel
 
 import hoods.com.jetexpense.core.navigation.Screen
+import hoods.com.jetexpense.core.utils.Category
 
 interface TransactionCallBack {
     fun onTitleChange(newValue: String)
@@ -10,6 +11,7 @@ interface TransactionCallBack {
     fun onDateChange(newValue: Long?)
     fun onScreenTypeChange(newValue: Screen)
     fun onOpenDialog(newValue: Boolean)
+    fun onCategoryChange(newValue: Category)
     fun addIncome()
     fun addExpense()
     fun getIncome(id: Int)
