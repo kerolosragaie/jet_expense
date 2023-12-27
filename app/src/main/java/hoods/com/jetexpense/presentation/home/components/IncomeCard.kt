@@ -1,6 +1,5 @@
 package hoods.com.jetexpense.presentation.home.components
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
