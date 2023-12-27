@@ -10,6 +10,6 @@ Income Management: Users can easily manage and monitor their income sources, pro
 Dark and Light Themes: The app supports both dark and light themes, ensuring a visually appealing and customizable user experience.
 
 
-## Screenshots
+## Overview
 
 <img src="screenshots/preview_1.gif" width="300" height="560"/>
