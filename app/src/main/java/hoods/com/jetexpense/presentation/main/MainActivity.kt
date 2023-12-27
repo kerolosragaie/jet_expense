@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -92,7 +93,8 @@ class MainActivity : ComponentActivity() {
                 ) { paddingValues ->
                     NavigationGraph(
                         modifier = Modifier
-                            .padding(paddingValues),
+                            .padding(paddingValues)
+                            .padding(4.dp),
                         navHostController = navHostController,
                         transactionAssistedFactory = transactionAssistedFactory,
                     )
