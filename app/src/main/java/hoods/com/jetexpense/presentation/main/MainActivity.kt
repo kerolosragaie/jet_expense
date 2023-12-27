@@ -1,25 +1,24 @@
-package hoods.com.jetexpense
+package hoods.com.jetexpense.presentation.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import hoods.com.jetexpense.R
 import hoods.com.jetexpense.core.components.CustomBottomBar
 import hoods.com.jetexpense.core.components.ExpenseAppBar
 import hoods.com.jetexpense.core.navigation.NavigationGraph
@@ -30,8 +29,15 @@ import hoods.com.jetexpense.data.dummy.dummyExpenseList
 import hoods.com.jetexpense.data.dummy.dummyIncomeList
 import hoods.com.jetexpense.presentation.home.HomeScreen
 import hoods.com.jetexpense.presentation.home.viewmodel.HomeUiState
+import hoods.com.jetexpense.presentation.main.viewmodel.MainViewModel
 import hoods.com.jetexpense.presentation.transaction.viewmodel.TransactionAssistedFactory
 import javax.inject.Inject
+
+enum class Theme {
+    SYSTEM,
+    DARK,
+    LIGHT,
+}
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -47,10 +53,8 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun JetExpenseApp() {
         val navHostController = rememberNavController()
-        val systemTheme = isSystemInDarkTheme()
-        var currentTheme by remember {
-            mutableStateOf(if (systemTheme) Theme.SYSTEM else Theme.LIGHT)
-        }
+        val viewModel: MainViewModel = hiltViewModel()
+        val currentTheme = viewModel.currentTheme.collectAsState().value
         val icon = when (currentTheme) {
             Theme.DARK -> R.drawable.ic_switch_on
             else -> R.drawable.ic_switch_off
@@ -65,10 +69,7 @@ class MainActivity : ComponentActivity() {
                             title = currentScreen.pageTitle,
                             icon = icon,
                             onSwitchClick = {
-                                currentTheme = when (currentTheme) {
-                                    Theme.DARK -> Theme.LIGHT
-                                    else -> Theme.DARK
-                                }
+                                viewModel.changeTheme()
                             },
                             onNavigateUp = {
                                 navHostController.navigateUp()
@@ -114,11 +115,7 @@ class MainActivity : ComponentActivity() {
         error("No theme provided")
     }
 
-    enum class Theme {
-        SYSTEM,
-        DARK,
-        LIGHT,
-    }
+
 }
 
 @Preview(showSystemUi = true)
