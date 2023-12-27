@@ -30,7 +30,7 @@ fun ExpenseAppBar(
         title = { Text(text = title) },
         navigationIcon = {
             AnimatedVisibility(
-                visible = title != Screen.Home.route
+                visible = title != Screen.Home.pageTitle
             ) {
                 IconButton(onClick = onNavigateUp) {
                     Icon(

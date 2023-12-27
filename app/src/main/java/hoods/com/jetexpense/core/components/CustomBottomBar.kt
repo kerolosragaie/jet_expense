@@ -7,7 +7,7 @@ import hoods.com.jetexpense.core.navigation.Screen
 import hoods.com.jetexpense.core.theme.JetExpenseTheme
 
 @Composable
-fun CustomButtonBar(
+fun CustomBottomBar(
     allScreens: List<Screen>,
     onTabSelected: (Screen) -> Unit,
     selectedTab: Screen,
@@ -40,7 +40,7 @@ fun CustomButtonBar(
 fun PrevCustomButtonBar() {
     val screens = listOf(Screen.Home, Screen.Income, Screen.Expense)
     JetExpenseTheme {
-        CustomButtonBar(
+        CustomBottomBar(
             allScreens = screens,
             onTabSelected = { _ -> },
             selectedTab = screens.first(),

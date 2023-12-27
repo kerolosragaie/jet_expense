@@ -8,7 +8,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
@@ -29,7 +28,6 @@ import hoods.com.jetexpense.R
 import hoods.com.jetexpense.core.theme.JetExpenseTheme
 
 
-private val TabHeight = 56.dp
 private const val InactiveTabOpacity = 0.60f
 private const val TabFadeInAnimationDelay = 100
 private const val TabFadeOutAnimationDuration = 100
@@ -63,7 +61,6 @@ fun TabButton(
         modifier = Modifier
             .padding(16.dp)
             .animateContentSize()
-            .height(TabHeight)
             .selectable(
                 selected = selected,
                 onClick = onSelected,
