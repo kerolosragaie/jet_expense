@@ -30,6 +30,7 @@ import hoods.com.jetexpense.data.dummy.dummyExpenseList
 import hoods.com.jetexpense.data.dummy.dummyIncomeList
 import hoods.com.jetexpense.presentation.home.HomeScreen
 import hoods.com.jetexpense.presentation.home.viewmodel.HomeUiState
+import hoods.com.jetexpense.presentation.home.viewmodel.HomeViewModel
 import hoods.com.jetexpense.presentation.main.viewmodel.MainViewModel
 import hoods.com.jetexpense.presentation.transaction.viewmodel.TransactionAssistedFactory
 import javax.inject.Inject
@@ -123,14 +124,11 @@ class MainActivity : ComponentActivity() {
 @Preview(showSystemUi = true)
 @Composable
 fun GreetingPreview() {
+    val homeViewModel: HomeViewModel = hiltViewModel()
+
     JetExpenseTheme {
         HomeScreen(
-            homeUiState = HomeUiState(
-                incomeList = dummyIncomeList,
-                expenseList = dummyExpenseList,
-                totalIncome = 5000f,
-                totalExpense = 3000f,
-            ),
+            homeViewModel = homeViewModel,
             onIncomeItemClick = {},
             onSeeAllIncome = {},
             onExpenseItemClick = {},

@@ -60,6 +60,7 @@ class TransactionViewModel @AssistedInject constructor(
     companion object {
         const val TAG = "transaction"
     }
+
     init {
         state = if (transactionId != -1) {
             when (transactionType) {
@@ -70,6 +71,7 @@ class TransactionViewModel @AssistedInject constructor(
                 Screen.Expense.route -> {
                     getExpense(transactionId)
                 }
+
                 else -> {
                     Log.i(TAG, "no route passed: $transactionType")
                 }
@@ -144,7 +146,7 @@ class TransactionViewModel @AssistedInject constructor(
 
     override fun getIncome(id: Int) {
         viewModelScope.launch {
-            expenseRepo.getIncomeById(id).data!!.collectLatest {
+            expenseRepo.getIncomeById(id).collectLatest {
                 state = state.copy(
                     id = it.id,
                     title = it.title,
@@ -159,7 +161,7 @@ class TransactionViewModel @AssistedInject constructor(
 
     override fun getExpense(id: Int) {
         viewModelScope.launch {
-            expenseRepo.getExpenseById(id).data!!.collectLatest {
+            expenseRepo.getExpenseById(id).collectLatest {
                 state = state.copy(
                     id = it.id,
                     title = it.title,

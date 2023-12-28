@@ -32,11 +32,11 @@ fun NavigationGraph(
     ) {
         composable(Screen.Home.route) {
 
-            // AmountAlertDialog(homeViewModel = homeViewModel)
+            //AmountAlertDialog(homeViewModel = homeViewModel)
 
             HomeScreen(
                 modifier = modifier,
-                homeUiState = homeViewModel.homeUiState,
+                homeViewModel = homeViewModel,
                 onIncomeItemClick = { incomeId ->
                     navHostController.navigateToTransactionScreen(
                         id = incomeId,

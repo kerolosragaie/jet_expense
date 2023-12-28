@@ -12,7 +12,7 @@ import hoods.com.jetexpense.presentation.home.viewmodel.HomeUiState
 
 @Composable
 fun ExpenseCard(
-    homeUiState: HomeUiState,
+    homeUiState: HomeUiState.Success,
     onClickSeeAll: () -> Unit,
     onClickItem: (id: Int) -> Unit,
 ) {
@@ -69,7 +69,7 @@ fun ExpenseRow(
 @Composable
 fun PrevExpenseCard() {
     ExpenseCard(
-        homeUiState = HomeUiState(
+        homeUiState = HomeUiState.Success(
             expenseList = dummyExpenseList,
             totalExpense = 20000f,
         ),

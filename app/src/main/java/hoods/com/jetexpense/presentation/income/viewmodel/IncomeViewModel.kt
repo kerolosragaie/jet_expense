@@ -20,7 +20,6 @@ class IncomeViewModel @Inject constructor(
     var incomeUiState by mutableStateOf(IncomeUiState())
             private set
 
-
     init {
         getAllIncome()
     }

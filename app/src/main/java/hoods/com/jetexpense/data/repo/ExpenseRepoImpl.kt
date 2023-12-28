@@ -59,52 +59,26 @@ class ExpenseRepoImpl @Inject constructor(
         }
     }
 
-    override fun getIncomeById(id: Int): ResultState<Flow<Income>> = try {
-        val income = incomeDao.getIncomeById(id).map { it.fromEntityToModel() }
-        ResultState.Success(income)
-    } catch (e: Exception) {
-        ResultState.Failure(e.message)
+    override fun getIncomeById(id: Int): Flow<Income> =
+        incomeDao.getIncomeById(id).map { it.fromEntityToModel() }
+
+    override fun getExpenseById(id: Int): Flow<Expense> =
+        expenseDao.getExpenseById(id).map { it.fromEntityToModel() }
+
+    override suspend fun updateIncome(income: Income) = withContext(dispatcher) {
+        incomeDao.updateIncome(income.fromModelToEntity())
     }
 
-    override fun getExpenseById(id: Int): ResultState<Flow<Expense>> = try {
-        val expense = expenseDao.getExpenseById(id).map { it.fromEntityToModel() }
-        ResultState.Success(expense)
-    } catch (e: Exception) {
-        ResultState.Failure(e.message)
-    }
-
-    override suspend fun updateIncome(income: Income): ResultState<Unit> = withContext(dispatcher) {
-        try {
-            incomeDao.updateIncome(income.fromModelToEntity())
-            ResultState.Success()
-        } catch (e: Exception) {
-            ResultState.Failure(e.message)
-        }
-    }
-
-    override suspend fun updateExpense(expense: Expense): ResultState<Unit> =
+    override suspend fun updateExpense(expense: Expense) =
         withContext(dispatcher) {
-            try {
-                expenseDao.updateExpense(expense.fromModelToEntity())
-                ResultState.Success()
-            } catch (e: Exception) {
-                ResultState.Failure(e.message)
-            }
+            expenseDao.updateExpense(expense.fromModelToEntity())
         }
 
-    override suspend fun deleteIncome(id: Int): ResultState<Int> = withContext(dispatcher) {
-        try {
-            ResultState.Success(incomeDao.deleteIncome(id))
-        } catch (e: Exception) {
-            ResultState.Failure(e.message)
-        }
+    override suspend fun deleteIncome(id: Int): Int = withContext(dispatcher) {
+        incomeDao.deleteIncome(id)
     }
 
-    override suspend fun deleteExpense(id: Int): ResultState<Int> = withContext(dispatcher) {
-        try {
-            ResultState.Success(expenseDao.deleteExpense(id))
-        } catch (e: Exception) {
-            ResultState.Failure(e.message)
-        }
+    override suspend fun deleteExpense(id: Int): Int = withContext(dispatcher) {
+        expenseDao.deleteExpense(id)
     }
 }
