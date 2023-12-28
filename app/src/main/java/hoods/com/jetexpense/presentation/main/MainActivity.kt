@@ -118,7 +118,7 @@ class MainActivity : ComponentActivity() {
 
 @Preview(showSystemUi = true)
 @Composable
-fun GreetingPreview() {
+fun AppPreview() {
     val homeViewModel: HomeViewModel = hiltViewModel()
 
     JetExpenseTheme {
