@@ -8,7 +8,6 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
@@ -26,10 +25,7 @@ import hoods.com.jetexpense.core.navigation.NavigationGraph
 import hoods.com.jetexpense.core.navigation.Screen
 import hoods.com.jetexpense.core.navigation.navigateToSingleTop
 import hoods.com.jetexpense.core.theme.JetExpenseTheme
-import hoods.com.jetexpense.data.dummy.dummyExpenseList
-import hoods.com.jetexpense.data.dummy.dummyIncomeList
 import hoods.com.jetexpense.presentation.home.HomeScreen
-import hoods.com.jetexpense.presentation.home.viewmodel.HomeUiState
 import hoods.com.jetexpense.presentation.home.viewmodel.HomeViewModel
 import hoods.com.jetexpense.presentation.main.viewmodel.MainViewModel
 import hoods.com.jetexpense.presentation.transaction.viewmodel.TransactionAssistedFactory
@@ -56,15 +52,14 @@ class MainActivity : ComponentActivity() {
     private fun JetExpenseApp() {
         val navHostController = rememberNavController()
         val viewModel: MainViewModel = hiltViewModel()
-        val currentTheme = viewModel.currentTheme.collectAsState().value
-        val icon = when (currentTheme) {
+        val icon = when (viewModel.currentTheme) {
             Theme.DARK -> R.drawable.ic_switch_on
             else -> R.drawable.ic_switch_off
         }
         val currentScreen = rememberCurrentScreen(navHostController)
 
-        CompositionLocalProvider(localAppTheme provides currentTheme) {
-            JetExpenseTheme(currentTheme == Theme.DARK) {
+        CompositionLocalProvider(localAppTheme provides viewModel.currentTheme) {
+            JetExpenseTheme(viewModel.currentTheme == Theme.DARK) {
                 Scaffold(
                     topBar = {
                         ExpenseAppBar(
