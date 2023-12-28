@@ -18,4 +18,6 @@
     <string name="dismiss">Dismiss</string>
     <string name="update_transaction">Update transaction</string>
     <string name="add_transaction">Add transaction</string>
+    <string name="error">Error</string>
+    <string name="something_wrong">Something went wrong.</string>
 </resources>
