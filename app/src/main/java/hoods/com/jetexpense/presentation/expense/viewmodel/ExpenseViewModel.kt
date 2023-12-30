@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import hoods.com.jetexpense.core.utils.ResultState
 import hoods.com.jetexpense.domain.repo.ExpenseRepo
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -14,9 +15,8 @@ import javax.inject.Inject
 class ExpenseViewModel @Inject constructor(
     private val expenseRepo: ExpenseRepo,
 ) : ViewModel() {
-    var expenseUiState: MutableStateFlow<ExpenseUiState> = MutableStateFlow(ExpenseUiState())
-        private set
-
+    private val _expenseUiState: MutableStateFlow<ExpenseUiState> by lazy { MutableStateFlow(ExpenseUiState()) }
+    val expenseUiState: StateFlow<ExpenseUiState> by lazy { _expenseUiState }
     init {
         getAllExpense()
     }
@@ -24,7 +24,7 @@ class ExpenseViewModel @Inject constructor(
     private fun getAllExpense() = viewModelScope.launch {
         if (expenseRepo.expense is ResultState.Success) {
             expenseRepo.expense.data?.collectLatest {
-                expenseUiState.value = expenseUiState.value.copy(
+                _expenseUiState.value = _expenseUiState.value.copy(
                     expenseList = it
                 )
             }
