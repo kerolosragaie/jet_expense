@@ -1,9 +1,6 @@
 package hoods.com.jetexpense.presentation.transaction.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -16,6 +13,8 @@ import hoods.com.jetexpense.core.utils.DateFormatter.formatDate
 import hoods.com.jetexpense.domain.models.Expense
 import hoods.com.jetexpense.domain.models.Income
 import hoods.com.jetexpense.domain.repo.ExpenseRepo
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Date
@@ -26,10 +25,14 @@ class TransactionViewModel @AssistedInject constructor(
     @Assisted private val transactionType: String,
 ) : ViewModel(), TransactionCallBack {
 
-    var state by mutableStateOf(TransactionState())
-        private set
+    private val _state: MutableStateFlow<TransactionUiState> by lazy {
+        MutableStateFlow(
+            TransactionUiState()
+        )
+    }
+    val state: StateFlow<TransactionUiState> by lazy { _state }
     val income: Income
-        get() = state.run {
+        get() = _state.value.run {
             Income(
                 id = id,
                 title = title,
@@ -41,7 +44,7 @@ class TransactionViewModel @AssistedInject constructor(
         }
 
     val expense: Expense
-        get() = state.run {
+        get() = _state.value.run {
             Expense(
                 id = id,
                 title = title,
@@ -53,16 +56,16 @@ class TransactionViewModel @AssistedInject constructor(
             )
         }
     override val isFieldsNotEmpty: Boolean
-        get() = state.title.isNotEmpty() &&
-                state.description.isNotEmpty() &&
-                state.amount.isNotEmpty()
+        get() = _state.value.title.isNotEmpty() &&
+                _state.value.description.isNotEmpty() &&
+                _state.value.amount.isNotEmpty()
 
     companion object {
-        const val TAG = "transaction"
+        const val TAG: String = "transaction"
     }
 
     init {
-        state = if (transactionId != -1) {
+        _state.value = if (transactionId != -1) {
             when (transactionType) {
                 Screen.Income.route -> {
                     getIncome(transactionId)
@@ -76,58 +79,59 @@ class TransactionViewModel @AssistedInject constructor(
                     Log.i(TAG, "no route passed: $transactionType")
                 }
             }
-            state.copy(isUpdatingTransaction = true)
+             _state.value.copy(isUpdatingTransaction = true)
         } else {
-            state.copy(isUpdatingTransaction = false)
+            //As the default is => isUpdatingTransaction = false
+            _state.value
         }
     }
 
     override fun onTitleChange(newValue: String) {
-        state = state.copy(
+        _state.value = _state.value.copy(
             title = newValue
         )
     }
 
     override fun onAmountChange(newValue: String) {
-        state = state.copy(
+        _state.value = _state.value.copy(
             amount = newValue
         )
     }
 
     override fun onDescriptionChange(newValue: String) {
-        state = state.copy(
+        _state.value = _state.value.copy(
             description = newValue
         )
     }
 
     override fun onTransactionTypeChange(newValue: String) {
-        state = state.copy(
+        _state.value = _state.value.copy(
             title = newValue
         )
     }
 
     override fun onDateChange(newValue: Long?) {
         newValue?.let {
-            state = state.copy(
+            _state.value = _state.value.copy(
                 date = Date(it)
             )
         }
     }
 
     override fun onScreenTypeChange(newValue: Screen) {
-        state = state.copy(
+        _state.value = _state.value.copy(
             transactionScreen = newValue
         )
     }
 
     override fun onOpenDialog(newValue: Boolean) {
-        state = state.copy(
+        _state.value = _state.value.copy(
             openDialog = newValue
         )
     }
 
     override fun onCategoryChange(newValue: Category) {
-        state = state.copy(
+        _state.value = _state.value.copy(
             category = newValue
         )
     }
@@ -147,7 +151,7 @@ class TransactionViewModel @AssistedInject constructor(
     override fun getIncome(id: Int) {
         viewModelScope.launch {
             expenseRepo.getIncomeById(id).collectLatest {
-                state = state.copy(
+                _state.value = _state.value.copy(
                     id = it.id,
                     title = it.title,
                     description = it.description,
@@ -162,7 +166,7 @@ class TransactionViewModel @AssistedInject constructor(
     override fun getExpense(id: Int) {
         viewModelScope.launch {
             expenseRepo.getExpenseById(id).collectLatest {
-                state = state.copy(
+                _state.value = _state.value.copy(
                     id = it.id,
                     title = it.title,
                     description = it.description,
@@ -191,18 +195,6 @@ class TransactionViewModel @AssistedInject constructor(
         }
     }
 }
-
-data class TransactionState(
-    val id: Int = 0,
-    val title: String = "",
-    val amount: String = "",
-    val category: Category = Category.CLOTHING,
-    val date: Date = Date(),
-    val description: String = "",
-    val transactionScreen: Screen = Screen.Income,
-    val openDialog: Boolean = true,
-    val isUpdatingTransaction: Boolean = false,
-)
 
 @Suppress("UNCHECKED_CAST")
 class TransactionViewModelFactory(

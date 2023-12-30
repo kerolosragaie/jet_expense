@@ -24,13 +24,13 @@ import hoods.com.jetexpense.core.navigation.Screen
 import hoods.com.jetexpense.core.theme.JetExpenseTheme
 import hoods.com.jetexpense.presentation.transaction.MockTransactionCallBacks
 import hoods.com.jetexpense.presentation.transaction.viewmodel.TransactionCallBack
-import hoods.com.jetexpense.presentation.transaction.viewmodel.TransactionState
+import hoods.com.jetexpense.presentation.transaction.viewmodel.TransactionUiState
 
 
 @Composable
 fun TransactionPopupTitle(
     icon: Int,
-    state: TransactionState,
+    state: TransactionUiState,
     transactionCallBack: TransactionCallBack,
     transactionScreenList: List<Screen>,
 ) {
@@ -89,7 +89,7 @@ fun PrevTransactionPopupTitle() {
     JetExpenseTheme {
         TransactionPopupTitle(
             icon = R.drawable.ic_income_dollar,
-            state = TransactionState(),
+            state = TransactionUiState(),
             transactionCallBack = MockTransactionCallBacks(),
             transactionScreenList = listOf(Screen.Income, Screen.Expense),
         )

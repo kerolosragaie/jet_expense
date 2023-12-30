@@ -2,7 +2,6 @@ package hoods.com.jetexpense.core.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -10,7 +9,6 @@ import androidx.navigation.compose.composable
 import hoods.com.jetexpense.presentation.expense.ExpenseScreen
 import hoods.com.jetexpense.presentation.home.HomeScreen
 import hoods.com.jetexpense.presentation.home.components.AmountAlertDialog
-import hoods.com.jetexpense.presentation.home.viewmodel.HomeViewModel
 import hoods.com.jetexpense.presentation.income.IncomeScreen
 import hoods.com.jetexpense.presentation.transaction.TransactionScreen
 import hoods.com.jetexpense.presentation.transaction.viewmodel.TransactionAssistedFactory

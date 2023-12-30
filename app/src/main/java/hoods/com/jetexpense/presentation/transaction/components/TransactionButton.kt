@@ -7,18 +7,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import hoods.com.jetexpense.R
 import hoods.com.jetexpense.core.navigation.Screen
 import hoods.com.jetexpense.core.theme.JetExpenseTheme
-import hoods.com.jetexpense.presentation.home.viewmodel.HomeViewModel
 import hoods.com.jetexpense.presentation.transaction.MockTransactionCallBacks
 import hoods.com.jetexpense.presentation.transaction.viewmodel.TransactionCallBack
-import hoods.com.jetexpense.presentation.transaction.viewmodel.TransactionState
+import hoods.com.jetexpense.presentation.transaction.viewmodel.TransactionUiState
 
 @Composable
 fun TransactionButton(
-    state: TransactionState,
+    state: TransactionUiState,
     transactionCallBack: TransactionCallBack,
     navigateUp: () -> Unit,
 ) {
@@ -62,7 +60,7 @@ fun TransactionButton(
 fun PrevTransactionButton() {
     JetExpenseTheme {
         TransactionButton(
-            state = TransactionState(),
+            state = TransactionUiState(),
             transactionCallBack = MockTransactionCallBacks(),
             navigateUp = {
 

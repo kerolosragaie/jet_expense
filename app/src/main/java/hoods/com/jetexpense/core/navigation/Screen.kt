@@ -47,7 +47,7 @@ sealed class Screen {
         override val iconResId: Int
             get() = R.drawable.add_entry
         override val pageTitle: String
-            get() = "Add transaction"
+            get() = "Transaction"
 
         const val transactionTypeArg = "Type"
         const val idTypeArg = "id"

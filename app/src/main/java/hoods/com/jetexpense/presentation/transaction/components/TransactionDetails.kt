@@ -20,20 +20,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import hoods.com.jetexpense.R
 import hoods.com.jetexpense.core.theme.JetExpenseTheme
 import hoods.com.jetexpense.core.utils.Category
 import hoods.com.jetexpense.presentation.transaction.MockTransactionCallBacks
 import hoods.com.jetexpense.presentation.transaction.viewmodel.TransactionCallBack
-import hoods.com.jetexpense.presentation.transaction.viewmodel.TransactionState
-import hoods.com.jetexpense.presentation.transaction.viewmodel.TransactionViewModel
+import hoods.com.jetexpense.presentation.transaction.viewmodel.TransactionUiState
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionDetails(
-    state: TransactionState,
+    state: TransactionUiState,
     transactionCallBack: TransactionCallBack,
     isExpenseTransaction: Boolean,
 ) {
@@ -90,7 +88,7 @@ fun TransactionDetails(
 fun PrevTransactionScreen() {
     JetExpenseTheme {
         TransactionDetails(
-            state = TransactionState(),
+            state = TransactionUiState(),
             isExpenseTransaction = true,
             transactionCallBack = MockTransactionCallBacks(),
         )
