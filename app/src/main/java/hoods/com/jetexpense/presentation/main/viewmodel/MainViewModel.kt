@@ -1,12 +1,11 @@
 package hoods.com.jetexpense.presentation.main.viewmodel
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hoods.com.jetexpense.presentation.main.Theme
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -14,10 +13,11 @@ class MainViewModel @Inject constructor(
     private val stateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    var currentTheme: Theme by mutableStateOf(getSelectedTheme())
+    private val _currentTheme: MutableStateFlow<Theme> by lazy { MutableStateFlow(getSelectedTheme()) }
+    val currentTheme: StateFlow<Theme> by lazy { _currentTheme }
     fun changeTheme() {
-        currentTheme = if (currentTheme == Theme.DARK) Theme.LIGHT else Theme.DARK
-        storeSelectedTheme(currentTheme.name)
+        _currentTheme.value = if ( _currentTheme.value == Theme.DARK) Theme.LIGHT else Theme.DARK
+        storeSelectedTheme(currentTheme.value.name)
     }
 
     private fun storeSelectedTheme(theme: String) {

@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -51,14 +52,15 @@ class MainActivity : ComponentActivity() {
     private fun JetExpenseApp() {
         val navHostController = rememberNavController()
         val viewModel: MainViewModel = hiltViewModel()
-        val icon = when (viewModel.currentTheme) {
+        val currentTheme = viewModel.currentTheme.collectAsStateWithLifecycle().value
+        val icon = when (currentTheme) {
             Theme.DARK -> R.drawable.ic_switch_on
             else -> R.drawable.ic_switch_off
         }
         val currentScreen = rememberCurrentScreen(navHostController)
 
-        CompositionLocalProvider(localAppTheme provides viewModel.currentTheme) {
-            JetExpenseTheme(viewModel.currentTheme == Theme.DARK) {
+        CompositionLocalProvider(localAppTheme provides currentTheme) {
+            JetExpenseTheme(currentTheme == Theme.DARK) {
                 Scaffold(
                     topBar = {
                         ExpenseAppBar(
