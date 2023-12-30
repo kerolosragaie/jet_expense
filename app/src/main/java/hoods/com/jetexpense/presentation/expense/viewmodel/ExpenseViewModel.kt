@@ -1,13 +1,11 @@
 package hoods.com.jetexpense.presentation.expense.viewmodel
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hoods.com.jetexpense.core.utils.ResultState
 import hoods.com.jetexpense.domain.repo.ExpenseRepo
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,17 +14,17 @@ import javax.inject.Inject
 class ExpenseViewModel @Inject constructor(
     private val expenseRepo: ExpenseRepo,
 ) : ViewModel() {
-    var expenseUiState by mutableStateOf(ExpenseUiState())
+    var expenseUiState: MutableStateFlow<ExpenseUiState> = MutableStateFlow(ExpenseUiState())
         private set
 
     init {
         getAllExpense()
     }
 
-    fun getAllExpense() = viewModelScope.launch {
+    private fun getAllExpense() = viewModelScope.launch {
         if (expenseRepo.expense is ResultState.Success) {
-            expenseRepo.expense.data!!.collectLatest {
-                expenseUiState = expenseUiState.copy(
+            expenseRepo.expense.data?.collectLatest {
+                expenseUiState.value = expenseUiState.value.copy(
                     expenseList = it
                 )
             }
@@ -37,3 +35,4 @@ class ExpenseViewModel @Inject constructor(
         expenseRepo.deleteExpense(id)
     }
 }
+

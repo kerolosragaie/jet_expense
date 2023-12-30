@@ -6,13 +6,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import hoods.com.jetexpense.R
 import hoods.com.jetexpense.core.theme.JetExpenseTheme
 import hoods.com.jetexpense.core.utils.DateFormatter.formatDate
 import hoods.com.jetexpense.core.utils.Util
 import hoods.com.jetexpense.core.utils.getColor
 import hoods.com.jetexpense.core.components.TransactionStatement
-import hoods.com.jetexpense.data.dummy.dummyExpenseList
 import hoods.com.jetexpense.presentation.expense.viewmodel.ExpenseUiState
 import hoods.com.jetexpense.presentation.expense.viewmodel.ExpenseViewModel
 import hoods.com.jetexpense.presentation.home.components.ExpenseRow
@@ -23,7 +23,7 @@ fun ExpenseScreen(
     viewModel: ExpenseViewModel = hiltViewModel(),
     onExpenseItemClick: (id: Int) -> Unit,
 ) {
-    val expenseUiState: ExpenseUiState = viewModel.expenseUiState
+    val expenseUiState: ExpenseUiState = viewModel.expenseUiState.collectAsStateWithLifecycle().value
 
     TransactionStatement(
         modifier = modifier,
