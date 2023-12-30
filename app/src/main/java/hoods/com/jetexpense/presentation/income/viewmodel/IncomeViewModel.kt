@@ -1,13 +1,12 @@
 package hoods.com.jetexpense.presentation.income.viewmodel
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hoods.com.jetexpense.core.utils.ResultState
 import hoods.com.jetexpense.domain.repo.ExpenseRepo
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,9 +15,8 @@ import javax.inject.Inject
 class IncomeViewModel @Inject constructor(
     private val expenseRepo: ExpenseRepo,
 ) : ViewModel() {
-
-    var incomeUiState by mutableStateOf(IncomeUiState())
-            private set
+    private val _incomeUiState: MutableStateFlow<IncomeUiState> by lazy { MutableStateFlow(IncomeUiState()) }
+    val incomeUiState: StateFlow<IncomeUiState> by lazy { _incomeUiState }
 
     init {
         getAllIncome()
@@ -26,8 +24,8 @@ class IncomeViewModel @Inject constructor(
 
     fun getAllIncome() = viewModelScope.launch {
         if (expenseRepo.income is ResultState.Success) {
-            expenseRepo.income.data!!.collectLatest {
-                incomeUiState = incomeUiState.copy(
+            expenseRepo.income.data?.collectLatest {
+                _incomeUiState.value = _incomeUiState.value.copy(
                     incomesList = it
                 )
             }
