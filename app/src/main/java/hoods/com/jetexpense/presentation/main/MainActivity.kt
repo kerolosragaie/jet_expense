@@ -124,7 +124,6 @@ fun AppPreview() {
             onSeeAllIncome = {},
             onExpenseItemClick = {},
             onSeeAllExpense = {},
-            onCLickInsert = {},
         )
     }
 }
