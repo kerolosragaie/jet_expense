@@ -35,7 +35,6 @@ fun HomeScreen(
     onSeeAllIncome: () -> Unit,
     onExpenseItemClick: (expenseId: Int) -> Unit,
     onSeeAllExpense: () -> Unit,
-    onCLickInsert: () -> Unit,
 ) {
     val homeUiStates = homeViewModel.homeUiState.collectAsStateWithLifecycle().value
 
@@ -64,7 +63,9 @@ fun HomeScreen(
                     onSeeAllIncome = onSeeAllIncome,
                     onExpenseItemClick = onExpenseItemClick,
                     onSeeAllExpense = onSeeAllExpense,
-                    onCLickInsert = onCLickInsert,
+                    onCLickInsert = {
+                        homeViewModel.showOrHildeAmountAlertDialog()
+                    },
                 )
             }
         }
@@ -144,7 +145,6 @@ fun PrevHomeScreen() {
             onSeeAllIncome = {},
             onExpenseItemClick = {},
             onSeeAllExpense = {},
-            onCLickInsert = {},
         )
     }
 }

@@ -18,7 +18,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -34,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import hoods.com.jetexpense.R
 import hoods.com.jetexpense.core.theme.JetExpenseTheme
 import hoods.com.jetexpense.core.utils.DateFormatter.formatDate
@@ -72,8 +72,9 @@ fun AmountAlertDialog(
     var selectedOption by remember {
         mutableStateOf(optionsList.first())
     }
+    val showAmountAlertDialog = homeViewModel.showAmountAlertDialog.collectAsStateWithLifecycle().value
 
-    if (!homeViewModel.showAmountAlertDialog.collectAsState().value) {
+    if (!showAmountAlertDialog) {
         title = ""
         description = ""
         expenseCategory = ""
@@ -171,7 +172,7 @@ fun AmountAlertDialog(
                                 .weight(1F),
                             onClick = {
                                 onClickCancel?.invoke()
-                                homeViewModel.showAmountAlertDialog.value = false
+                                homeViewModel.showOrHildeAmountAlertDialog()
                             },
                         ) {
                             Text(text = negativeBttnTitle)
@@ -215,7 +216,7 @@ fun AmountAlertDialog(
                                         )
                                     }
                                     onClickOk?.invoke()
-                                    homeViewModel.showAmountAlertDialog.value = false
+                                    homeViewModel.showOrHildeAmountAlertDialog()
                                 }
                             },
                         ) {

@@ -28,7 +28,8 @@ class HomeViewModel @Inject constructor(
     val homeUiState: StateFlow<HomeUiState> by lazy { _homeUiState }
 
     //To show/hide dialog
-    val showAmountAlertDialog: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    private val _showAmountAlertDialog: MutableStateFlow<Boolean> by lazy { MutableStateFlow(false) }
+    val showAmountAlertDialog: StateFlow<Boolean> by lazy { _showAmountAlertDialog }
 
     init {
         getIncomeAndExpense()
@@ -87,6 +88,11 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+
+    fun showOrHildeAmountAlertDialog() = viewModelScope.launch {
+        _showAmountAlertDialog.emit(!_showAmountAlertDialog.value)
+    }
+
 }
 
 
