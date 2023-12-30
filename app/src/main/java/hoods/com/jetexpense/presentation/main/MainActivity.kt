@@ -26,7 +26,6 @@ import hoods.com.jetexpense.core.navigation.Screen
 import hoods.com.jetexpense.core.navigation.navigateToSingleTop
 import hoods.com.jetexpense.core.theme.JetExpenseTheme
 import hoods.com.jetexpense.presentation.home.HomeScreen
-import hoods.com.jetexpense.presentation.home.viewmodel.HomeViewModel
 import hoods.com.jetexpense.presentation.main.viewmodel.MainViewModel
 import hoods.com.jetexpense.presentation.transaction.viewmodel.TransactionAssistedFactory
 import javax.inject.Inject
@@ -119,11 +118,8 @@ class MainActivity : ComponentActivity() {
 @Preview(showSystemUi = true)
 @Composable
 fun AppPreview() {
-    val homeViewModel: HomeViewModel = hiltViewModel()
-
     JetExpenseTheme {
         HomeScreen(
-            homeViewModel = homeViewModel,
             onIncomeItemClick = {},
             onSeeAllIncome = {},
             onExpenseItemClick = {},

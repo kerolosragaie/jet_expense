@@ -17,7 +17,6 @@ fun CustomBottomBar(
         floatingActionButton = {
             FloatingActionBttn(
                 onClick = onFabClicked,
-                selectedTab = selectedTab,
             )
         },
         actions = {

@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import hoods.com.jetexpense.R
 import hoods.com.jetexpense.core.theme.JetExpenseTheme
 import hoods.com.jetexpense.core.utils.DateFormatter.formatDate
@@ -14,14 +15,16 @@ import hoods.com.jetexpense.data.dummy.dummyIncomeList
 import hoods.com.jetexpense.presentation.home.components.IncomeRow
 import hoods.com.jetexpense.core.components.TransactionStatement
 import hoods.com.jetexpense.presentation.income.viewmodel.IncomeUiState
+import hoods.com.jetexpense.presentation.income.viewmodel.IncomeViewModel
 
 @Composable
 fun IncomeScreen(
     modifier: Modifier = Modifier,
-    incomeUiState: IncomeUiState,
+    viewModel: IncomeViewModel = hiltViewModel(),
     onIncomeItemClick: (id: Int) -> Unit,
-    onIncomeItemDelete: (id: Int) -> Unit,
 ) {
+    val incomeUiState: IncomeUiState = viewModel.incomeUiState
+
     TransactionStatement(
         modifier = modifier,
         items = incomeUiState.incomesList,
@@ -30,7 +33,7 @@ fun IncomeScreen(
         amountsTotal = incomeUiState.incomesList.sumOf { it.incomeAmount }.toFloat(),
         circleLabel = stringResource(R.string.receive),
         onItemSwiped = { item ->
-            onIncomeItemDelete.invoke(item.id)
+            viewModel.deleteIncome(item.id)
         },
         key = { it.id },
     ) {
@@ -53,17 +56,9 @@ fun IncomeScreen(
 @Preview(showSystemUi = true)
 @Composable
 fun PrevIncomeScreen() {
-    val incomeUiState = IncomeUiState(dummyIncomeList)
-
     JetExpenseTheme {
         IncomeScreen(
-            incomeUiState = incomeUiState,
-            onIncomeItemClick = {
-
-            },
-            onIncomeItemDelete = {
-
-            },
+            onIncomeItemClick = {},
         )
     }
 }

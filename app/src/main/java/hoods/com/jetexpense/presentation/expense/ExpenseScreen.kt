@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import hoods.com.jetexpense.R
 import hoods.com.jetexpense.core.theme.JetExpenseTheme
 import hoods.com.jetexpense.core.utils.DateFormatter.formatDate
@@ -13,15 +14,17 @@ import hoods.com.jetexpense.core.utils.getColor
 import hoods.com.jetexpense.core.components.TransactionStatement
 import hoods.com.jetexpense.data.dummy.dummyExpenseList
 import hoods.com.jetexpense.presentation.expense.viewmodel.ExpenseUiState
+import hoods.com.jetexpense.presentation.expense.viewmodel.ExpenseViewModel
 import hoods.com.jetexpense.presentation.home.components.ExpenseRow
 
 @Composable
 fun ExpenseScreen(
     modifier: Modifier = Modifier,
-    expenseUiState: ExpenseUiState,
+    viewModel: ExpenseViewModel = hiltViewModel(),
     onExpenseItemClick: (id: Int) -> Unit,
-    onExpenseItemDelete: (id: Int) -> Unit,
 ) {
+    val expenseUiState: ExpenseUiState = viewModel.expenseUiState
+
     TransactionStatement(
         modifier = modifier,
         items = expenseUiState.expenseList,
@@ -30,7 +33,7 @@ fun ExpenseScreen(
         amountsTotal = expenseUiState.expenseList.sumOf { it.expenseAmount }.toFloat(),
         circleLabel = stringResource(R.string.pay),
         onItemSwiped = { item ->
-            onExpenseItemDelete.invoke(item.id)
+            viewModel.deleteExpense(item.id)
         },
         key = { it.id },
     ) {
@@ -53,13 +56,9 @@ fun ExpenseScreen(
 @Preview(showSystemUi = true)
 @Composable
 fun PrevExpenseScreen() {
-    val expenseUiState = ExpenseUiState(dummyExpenseList)
-
     JetExpenseTheme {
         ExpenseScreen(
-            expenseUiState = expenseUiState,
             onExpenseItemClick = {},
-            onExpenseItemDelete = {},
         )
     }
 }

@@ -30,7 +30,7 @@ import hoods.com.jetexpense.presentation.home.viewmodel.HomeViewModel
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    homeViewModel: HomeViewModel,
+    homeViewModel: HomeViewModel = hiltViewModel(),
     onIncomeItemClick: (incomeId: Int) -> Unit,
     onSeeAllIncome: () -> Unit,
     onExpenseItemClick: (expenseId: Int) -> Unit,
@@ -38,7 +38,7 @@ fun HomeScreen(
     onCLickInsert: () -> Unit,
 ) {
     val homeUiStates = homeViewModel.homeUiState.collectAsStateWithLifecycle().value
-    
+
     Scaffold(
         modifier = modifier,
     ) { contentPadding ->
