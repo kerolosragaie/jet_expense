@@ -2,16 +2,22 @@ package hoods.com.jetexpense.presentation.home.components
 
 import android.content.res.Configuration
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.InputChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -26,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,12 +43,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import hoods.com.jetexpense.R
 import hoods.com.jetexpense.core.theme.JetExpenseTheme
+import hoods.com.jetexpense.core.utils.Category
 import hoods.com.jetexpense.core.utils.DateFormatter.formatDate
 import hoods.com.jetexpense.domain.models.Expense
 import hoods.com.jetexpense.domain.models.Income
 import hoods.com.jetexpense.presentation.home.viewmodel.HomeViewModel
 import java.util.Calendar
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AmountAlertDialog(
     homeViewModel: HomeViewModel = hiltViewModel(),
@@ -72,7 +81,8 @@ fun AmountAlertDialog(
     var selectedOption by remember {
         mutableStateOf(optionsList.first())
     }
-    val showAmountAlertDialog = homeViewModel.showAmountAlertDialog.collectAsStateWithLifecycle().value
+    val showAmountAlertDialog =
+        homeViewModel.showAmountAlertDialog.collectAsStateWithLifecycle().value
 
     if (!showAmountAlertDialog) {
         title = ""
@@ -130,18 +140,6 @@ fun AmountAlertDialog(
                         },
                     )
                 }
-                if (selectedOption.lowercase() == "expense") {
-                    item {
-                        OutlinedTextField(
-                            modifier = Modifier.padding(8.dp),
-                            value = expenseCategory,
-                            onValueChange = { expenseCategory = it },
-                            label = {
-                                Text(stringResource(R.string.category))
-                            },
-                        )
-                    }
-                }
                 item {
                     OutlinedTextField(
                         modifier = Modifier.padding(8.dp),
@@ -162,6 +160,31 @@ fun AmountAlertDialog(
                             Text(stringResource(R.string.amount))
                         },
                     )
+                }
+                item {
+                    AnimatedVisibility(visible = selectedOption.lowercase() == "expense") {
+                        LazyRow {
+                            items(Category.values()) { category ->
+                                InputChip(
+                                    modifier = Modifier.padding(8.dp),
+                                    selected = category.title == expenseCategory,
+                                    onClick = {
+                                        expenseCategory = category.title
+                                    },
+                                    label = {
+                                        Text(text = category.title)
+                                    },
+                                    trailingIcon = {
+                                        Icon(
+                                            modifier = Modifier.size(24.dp),
+                                            painter = painterResource(id = category.iconRes),
+                                            contentDescription = null,
+                                        )
+                                    },
+                                )
+                            }
+                        }
+                    }
                 }
                 item {
                     Row {
